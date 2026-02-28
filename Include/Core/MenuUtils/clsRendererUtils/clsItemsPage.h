@@ -6,57 +6,56 @@
 
 class clsRenderer::clsItemsRenderer::clsItemsPage{
         
-    clsRenderer& _Renderer;
     clsItemsRenderer& _ItemsRenderer;
 
     unsigned short _NumberOfItemsInPage {}, _PageNumber {}, _FirstItemIndex {}, _LastItemIndex {};
 
-    unsigned short _CaculateNumberOfItemsInPage(){
+    unsigned short _CaculateNumberOfItemsInPage(const clsMenu& MenuToRender){
         
-        IPlatform::stTerminalSize CurrentTerminalSize {_Renderer._Platform.GetTerminalSize()};
+        IPlatform::stTerminalSize CurrentTerminalSize {_ItemsRenderer._Renderer._Platform.GetTerminalSize()};
         
-        unsigned short MenuBlocksLinesNumber {(unsigned short) (_Renderer._MenuToRender.GetMenuHeader().GetNumberOfLines() + _Renderer._MenuToRender.GetMenuFooter().GetNumberOfLines())};
+        unsigned short MenuBlocksLinesNumber {(unsigned short) (MenuToRender.GetMenuHeader().GetNumberOfLines() + MenuToRender.GetMenuFooter().GetNumberOfLines())};
         
         unsigned short AvalibleLinesForItems {(unsigned short) (CurrentTerminalSize.Rows - MenuBlocksLinesNumber)};
         
         // there is a min value for the number of items in the page which is 2
         const short MIN_PAGE_SIZE = 2;
 
-        if (AvalibleLinesForItems > _Renderer._MenuToRender.GetNumberOfItems() || _Renderer._MenuToRender.GetNumberOfItems() < MIN_PAGE_SIZE)
-            return _Renderer._MenuToRender.GetNumberOfItems();
+        if (AvalibleLinesForItems > MenuToRender.GetNumberOfItems() || MenuToRender.GetNumberOfItems() < MIN_PAGE_SIZE)
+            return MenuToRender.GetNumberOfItems();
         else
             return AvalibleLinesForItems > MIN_PAGE_SIZE ? AvalibleLinesForItems : MIN_PAGE_SIZE;
     
    }
 
-    void _PreparePage(unsigned int SelectedItem){
+    void _PreparePage(const clsMenu& MenuToRender, unsigned int SelectedItem){
 
-        _NumberOfItemsInPage = _CaculateNumberOfItemsInPage();
+        _NumberOfItemsInPage = _CaculateNumberOfItemsInPage(MenuToRender);
 
         if (_NumberOfItemsInPage == 0) return; // no need to complete as the menu is empty
 
         _PageNumber = SelectedItem / _NumberOfItemsInPage;
         _FirstItemIndex = _NumberOfItemsInPage * _PageNumber;
         short tempLastItemIndex {(short) (_FirstItemIndex + _NumberOfItemsInPage - 1)};
-        _LastItemIndex = tempLastItemIndex >= _Renderer._MenuToRender.GetVItems().size() ? _Renderer._MenuToRender.GetVItems().size() - 1 : tempLastItemIndex;
+        _LastItemIndex = tempLastItemIndex >= MenuToRender.GetVItems().size() ? MenuToRender.GetVItems().size() - 1 : tempLastItemIndex;
 
     }
 
 public:
     
-    clsItemsPage(clsRenderer& Renderer, clsItemsRenderer& ItemsRenderer)
-    : _Renderer(Renderer), _ItemsRenderer(ItemsRenderer) {}
+    clsItemsPage(clsItemsRenderer& ItemsRenderer)
+    : _ItemsRenderer(ItemsRenderer) {}
     
-    void RenderPage(unsigned int SelectedItem){
+    void RenderPage(const clsMenu& MenuToRender, unsigned int SelectedItem){
 
-        if (_Renderer._MenuToRender.IsEmpty()) 
+        if (MenuToRender.IsEmpty()) 
         {
             std::cout << "Ops... this menu is empty!\n";
             return;
         }
 
-        _PreparePage(SelectedItem);
-        const std::vector<EasyMenuComponents::clsEasyMenuItem>& vItems {_Renderer._MenuToRender.GetVItems()};
+        _PreparePage(MenuToRender, SelectedItem);
+        const std::vector<EasyMenuComponents::clsEasyMenuItem>& vItems {MenuToRender.GetVItems()};
 
         for (short i = _FirstItemIndex; i <= _LastItemIndex; i++)
             _ItemsRenderer._RenderSingelItem(vItems.at(i), (i == SelectedItem));

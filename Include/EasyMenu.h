@@ -28,7 +28,7 @@ public:
     // this shows the interactive menu and returns what the user selected.
     unsigned int RunMenu(){
 
-        return clsNavigator(*_Platform, _Menu).GetSelection();
+        return clsNavigator(*_Platform).GetSelection(_Menu);
 
     }
 

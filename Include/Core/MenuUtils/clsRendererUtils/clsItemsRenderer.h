@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "..\clsRenderer.h"
-
+#include <memory>
 
 class clsRenderer::clsItemsRenderer{
         
@@ -26,19 +26,21 @@ class clsRenderer::clsItemsRenderer{
     
     class clsItemsPage;
 
+    std::unique_ptr<clsItemsPage> _ItemsPage {std::make_unique<clsItemsPage>(*this)};
+
     public:
     
     clsItemsRenderer(clsRenderer& Renderer) : _Renderer(Renderer) {}
 
-    void RenderItems(unsigned int SelectedItem);
+    void RenderItems(const clsMenu& MenuToRender, unsigned int SelectedItem);
 
 };
 
-// include nested classe here
+// include nested classes here
 #include "clsItemsPage.h"
 
-void clsRenderer::clsItemsRenderer::RenderItems(unsigned int SelectedItem){
+void clsRenderer::clsItemsRenderer::RenderItems(const clsMenu& MenuToRender, unsigned int SelectedItem){
 
-    clsItemsPage(_Renderer, *this).RenderPage(SelectedItem);
+    _ItemsPage->RenderPage(MenuToRender, SelectedItem);
     
 }

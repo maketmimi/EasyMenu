@@ -10,68 +10,68 @@
 class clsNavigator {
 
     IPlatform& _Platform;
-    const clsMenu& _MenuToNavigate;
-    unsigned int _SelectedItem {0};
 
     bool _IsItemNavigable(const EasyMenuComponents::clsEasyMenuItem& ItemToCheck){
 
-        return _MenuToNavigate.GetItem(_SelectedItem).IsActive() && _MenuToNavigate.GetItem(_SelectedItem).IsVisible();
+        return ItemToCheck.IsActive() && ItemToCheck.IsVisible();
 
     }
 
-    void _SelectNextItem(){
+    void _SelectNextItem(const clsMenu& MenuToNavigate, unsigned int& SelectedItem){
 
         do
         {
-            ++_SelectedItem%= _MenuToNavigate.GetNumberOfItems();
+            ++SelectedItem%= MenuToNavigate.GetNumberOfItems();
         }
-        while (!_IsItemNavigable(_MenuToNavigate.GetItem(_SelectedItem)));
+        while (!_IsItemNavigable(MenuToNavigate.GetItem(SelectedItem)));
 
     }
     
-    void _SelectPreviousItem(){
+    void _SelectPreviousItem(const clsMenu& MenuToNavigate, unsigned int& SelectedItem){
         
         do
         {
-            if (_SelectedItem == 0)
-                _SelectedItem = _MenuToNavigate.GetNumberOfItems() - 1;
+            if (SelectedItem == 0)
+                SelectedItem = MenuToNavigate.GetNumberOfItems() - 1;
             else 
-                _SelectedItem--;
+                SelectedItem--;
         }
-        while (!_IsItemNavigable(_MenuToNavigate.GetItem(_SelectedItem)));
+        while (!_IsItemNavigable(MenuToNavigate.GetItem(SelectedItem)));
 
     }
 
     // returns 0 if the Menu is empty
-    unsigned int _NavigateMenu(){
+    unsigned int _NavigateMenu(const clsMenu& MenuToNavigate){
 
-        clsRenderer MenuRenderer(_Platform, _MenuToNavigate);
+        clsRenderer MenuRenderer(_Platform);
         _Platform.PrepareTerminal();
+
+        unsigned int SelectedItem {0};
         
-        if (_MenuToNavigate.IsEmpty() || !_MenuToNavigate.CheckIfThereIsNavigableItems())
+        if (MenuToNavigate.IsEmpty() || !MenuToNavigate.CheckIfThereIsNavigableItems())
         {
-            MenuRenderer.RenderMenu(_SelectedItem); 
+            MenuRenderer.RenderMenu(MenuToNavigate, SelectedItem); 
             _Platform.RestoreTerminal();
             return 0; // Can't navigate menu
         }
         
         while (true){
 
-            MenuRenderer.RenderMenu(_SelectedItem);
+            MenuRenderer.RenderMenu(MenuToNavigate, SelectedItem);
 
             IPlatform::enKey KeyPressed {_Platform.ReadValidKey()};
 
             switch (KeyPressed)
             {
             case IPlatform::enKey::UpArrow:
-                _SelectPreviousItem();
+                _SelectPreviousItem(MenuToNavigate, SelectedItem);
                 break;
             case IPlatform::enKey::DownArrow:
-                _SelectNextItem();
+                _SelectNextItem(MenuToNavigate, SelectedItem);
                 break;
             default:
                 _Platform.RestoreTerminal();
-                return _SelectedItem + 1;      
+                return SelectedItem + 1;      
             }
 
         }
@@ -80,15 +80,15 @@ class clsNavigator {
 
 public:
 
-    clsNavigator(IPlatform& Platform, const clsMenu& MenuToNavigate) : _Platform(Platform), _MenuToNavigate(MenuToNavigate)
+    clsNavigator(IPlatform& Platform) : _Platform(Platform)
     {}
 
     // this shows the menu to the user and
     // returns the selected item starting from 1, 
     // and returns 0 if the Menu is empty or can't be navigated ie. "all items are invisible"
-    unsigned int GetSelection(){
+    unsigned int GetSelection(const clsMenu& MenuToNavigate){
 
-        return _NavigateMenu();
+        return _NavigateMenu(MenuToNavigate);
 
     }
 

@@ -5,13 +5,16 @@
 #include "..\MenuComponents\clsEasyMenuItem.h"
 #include <vector>
 #include "..\Platform\IPlatform.h"
+#include <memory>
+
 
 class clsRenderer {
 
     IPlatform& _Platform;
-    const clsMenu& _MenuToRender;
 
     class clsItemsRenderer;
+
+    std::unique_ptr<clsItemsRenderer> _ItemsRenderer {std::make_unique<clsItemsRenderer>(*this)};
 
     void RenderMenuBlock(const EasyMenuComponents::clsMenuBlock& MenuBlock){
 
@@ -24,10 +27,10 @@ class clsRenderer {
 
 public:
 
-    clsRenderer(IPlatform& Platform, const clsMenu& MenuToRender)
-    : _Platform(Platform), _MenuToRender(MenuToRender) {}
+    clsRenderer(IPlatform& Platform)
+    : _Platform(Platform){}
 
-    void RenderMenu(const unsigned int SelectedItem);
+    void RenderMenu(const clsMenu& MenuToRender, const unsigned int SelectedItem);
 
 };
 
@@ -36,14 +39,14 @@ public:
 #include "clsRendererUtils\clsItemsRenderer.h"
 
 
-void clsRenderer::RenderMenu(const unsigned int SelectedItem){
+void clsRenderer::RenderMenu(const clsMenu& MenuToRender, const unsigned int SelectedItem){
 
     _Platform.ClearScreen();
-    RenderMenuBlock(_MenuToRender.GetMenuHeader());
+    RenderMenuBlock(MenuToRender.GetMenuHeader());
     
-    clsItemsRenderer(*this).RenderItems(SelectedItem);
+    _ItemsRenderer->RenderItems(MenuToRender, SelectedItem);
     
-    RenderMenuBlock(_MenuToRender.GetMenuFooter());
+    RenderMenuBlock(MenuToRender.GetMenuFooter());
 
 }   
  
