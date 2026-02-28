@@ -4,6 +4,7 @@
 #include "IPlatform.h"
 #include <conio.h>
 #include <windows.h>
+#include "..\GeneralHelpers\clsValidate.h"
 
 class clsWindowsPlatform : public IPlatform{
 
@@ -58,13 +59,13 @@ public:
 
     void PrepareTerminal() override{
 
-        // nothing for now
+        SetCursorVisibility(false);
 
     }
 
     void RestoreTerminal() override{
 
-        // nothing here for now
+        SetCursorVisibility(true);
 
     }
 
@@ -98,6 +99,22 @@ public:
         WORD InvertedAttrs {(short unsigned int) ((ForeColor << 4) | (BackGroundColor >> 4))};
 
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), InvertedAttrs);
+
+    }
+
+    void SetCursorVisibility(bool Visible) override{
+
+        CONSOLE_CURSOR_INFO CursorInfo;
+        HANDLE hSTDOutput {GetStdHandle(STD_OUTPUT_HANDLE)};
+
+        GetConsoleCursorInfo(hSTDOutput, &CursorInfo);
+
+        if (!clsValidate::IsNumberBetween((int) (CursorInfo.dwSize), 1, 100))
+            CursorInfo.dwSize = 25; // this is hardcoded default value in case the value was wrong
+
+        CursorInfo.bVisible = (WINBOOL) Visible;
+
+        SetConsoleCursorInfo(hSTDOutput, &CursorInfo);
 
     }
 

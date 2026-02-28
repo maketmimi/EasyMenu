@@ -149,4 +149,20 @@ public:
 
     }
 
+    // this has time complixity of O(n)
+    bool CheckIfThereIsNavigableItems() const{
+
+        for (const EasyMenuComponents::clsEasyMenuItem& Item : _vItems)
+            if (Item.IsActive() && Item.IsVisible())
+                return true;
+
+        return false;
+    }
+
+    const EasyMenuComponents::clsEasyMenuItem& GetItem(size_t Index) const{
+
+        return _vItems.at(Index);
+
+    }
+
 };

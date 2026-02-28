@@ -13,7 +13,7 @@ class clsRenderer::clsItemsRenderer{
         if (!Item.IsVisible()) return;
         
         // may be we have a function that beleongs to a theme that prints a highlighted text or some thing
-        if (IsSelected)
+        if (IsSelected && Item.IsActive())
         {
             _Renderer._Platform.HighlightNextOutput();
             std::cout << Item.GetLabel() << '\n';

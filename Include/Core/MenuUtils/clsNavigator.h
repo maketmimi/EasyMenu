@@ -13,18 +13,32 @@ class clsNavigator {
     const clsMenu& _MenuToNavigate;
     unsigned int _SelectedItem {0};
 
-    void SelectNextItem(){
+    bool _IsItemNavigable(const EasyMenuComponents::clsEasyMenuItem& ItemToCheck){
 
-        ++_SelectedItem%= _MenuToNavigate.GetNumberOfItems();
+        return _MenuToNavigate.GetItem(_SelectedItem).IsActive() && _MenuToNavigate.GetItem(_SelectedItem).IsVisible();
+
+    }
+
+    void _SelectNextItem(){
+
+        do
+        {
+            ++_SelectedItem%= _MenuToNavigate.GetNumberOfItems();
+        }
+        while (!_IsItemNavigable(_MenuToNavigate.GetItem(_SelectedItem)));
 
     }
     
-    void SelectPreviousItem(){
+    void _SelectPreviousItem(){
         
-        if (_SelectedItem == 0)
-            _SelectedItem = _MenuToNavigate.GetNumberOfItems() - 1;
-        else 
-            _SelectedItem--;
+        do
+        {
+            if (_SelectedItem == 0)
+                _SelectedItem = _MenuToNavigate.GetNumberOfItems() - 1;
+            else 
+                _SelectedItem--;
+        }
+        while (!_IsItemNavigable(_MenuToNavigate.GetItem(_SelectedItem)));
 
     }
 
@@ -34,11 +48,11 @@ class clsNavigator {
         clsRenderer MenuRenderer(_Platform, _MenuToNavigate);
         _Platform.PrepareTerminal();
         
-        if (_MenuToNavigate.IsEmpty())
+        if (_MenuToNavigate.IsEmpty() || !_MenuToNavigate.CheckIfThereIsNavigableItems())
         {
-            MenuRenderer.RenderMenu(_SelectedItem); // this will show an empty menu
+            MenuRenderer.RenderMenu(_SelectedItem); 
             _Platform.RestoreTerminal();
-            return 0; // Can't navigate empty menu
+            return 0; // Can't navigate menu
         }
         
         while (true){
@@ -50,10 +64,10 @@ class clsNavigator {
             switch (KeyPressed)
             {
             case IPlatform::enKey::UpArrow:
-                SelectPreviousItem();
+                _SelectPreviousItem();
                 break;
             case IPlatform::enKey::DownArrow:
-                SelectNextItem();
+                _SelectNextItem();
                 break;
             default:
                 _Platform.RestoreTerminal();
@@ -70,7 +84,8 @@ public:
     {}
 
     // this shows the menu to the user and
-    // returns the selected item starting from 1, and returns 0 if the Menu is empty
+    // returns the selected item starting from 1, 
+    // and returns 0 if the Menu is empty or can't be navigated ie. "all items are invisible"
     unsigned int GetSelection(){
 
         return _NavigateMenu();

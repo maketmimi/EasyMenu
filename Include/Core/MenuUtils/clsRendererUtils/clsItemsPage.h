@@ -32,6 +32,9 @@ class clsRenderer::clsItemsRenderer::clsItemsPage{
     void _PreparePage(unsigned int SelectedItem){
 
         _NumberOfItemsInPage = _CaculateNumberOfItemsInPage();
+
+        if (_NumberOfItemsInPage == 0) return; // no need to complete as the menu is empty
+
         _PageNumber = SelectedItem / _NumberOfItemsInPage;
         _FirstItemIndex = _NumberOfItemsInPage * _PageNumber;
         short tempLastItemIndex {(short) (_FirstItemIndex + _NumberOfItemsInPage - 1)};
@@ -46,10 +49,13 @@ public:
     
     void RenderPage(unsigned int SelectedItem){
 
-        if (_Renderer._MenuToRender.IsEmpty()) std::cout << "Ops... this menu is empty!\n";
+        if (_Renderer._MenuToRender.IsEmpty()) 
+        {
+            std::cout << "Ops... this menu is empty!\n";
+            return;
+        }
 
         _PreparePage(SelectedItem);
-
         const std::vector<EasyMenuComponents::clsEasyMenuItem>& vItems {_Renderer._MenuToRender.GetVItems()};
 
         for (short i = _FirstItemIndex; i <= _LastItemIndex; i++)

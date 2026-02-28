@@ -48,6 +48,8 @@ public:
 
     virtual void ResetOutputToOriginalState() = 0;
 
+    virtual void SetCursorVisibility(bool Visible) = 0;
+
     virtual ~IPlatform() = default;
 
 };
