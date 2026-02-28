@@ -4,9 +4,13 @@
 #include <vector>
 #include "Core\MenuUtils\clsMenu.h"
 #include "Core\MenuUtils\clsNavigator.h"
+#include "Core\Platform\IPlatform.h"
+#include <memory>
+#include "Core\Platform\PlatformFactory.h"
 
 class EasyMenu {
 
+    std::unique_ptr<IPlatform> _Platform {CreatePlatform()};
     clsMenu _Menu;
     
 public:
@@ -24,7 +28,7 @@ public:
     // this shows the interactive menu and returns what the user selected.
     unsigned int RunMenu(){
 
-        return clsNavigator::GetSelection(_Menu);
+        return clsNavigator(*_Platform, _Menu).GetSelection();
 
     }
 
@@ -36,25 +40,25 @@ public:
 
     bool UpdateItem(size_t ItemNumber, const std::string& Label, bool Active = true, bool Visible = true){
 
-        _Menu.UpdateItem(ItemNumber, Label, Active, Visible);
+        return _Menu.UpdateItem(ItemNumber, Label, Active, Visible);
 
     }
 
     bool RemoveItem(size_t ItemNumber){
 
-        _Menu.RemoveItem(ItemNumber);
+        return _Menu.RemoveItem(ItemNumber);
 
     }
 
     bool SetVisibility(size_t ItemNumber, bool Visible){
 
-        _Menu.SetVisibility(ItemNumber, Visible);
+        return _Menu.SetVisibility(ItemNumber, Visible);
 
     }
 
     bool SetActivity(size_t ItemNumber, bool Active){
 
-        _Menu.SetActivity(ItemNumber, Active);
+        return _Menu.SetActivity(ItemNumber, Active);
 
     }
 
@@ -87,7 +91,7 @@ public:
         _Menu.SetMenuHeader(Header);
 
     }
-    EasyMenuComponents::clsEasyMenuHeader GetHeader() const {
+    const EasyMenuComponents::clsEasyMenuHeader& GetHeader() const {
 
         return _Menu.GetMenuHeader();
 
@@ -98,10 +102,16 @@ public:
         _Menu.SetMenuFooter(Footer);
         
     }
-    EasyMenuComponents::clsEasyMenuFooter GetFooter() const {
+    const EasyMenuComponents::clsEasyMenuFooter& GetFooter() const {
 
         return _Menu.GetMenuFooter();
 
     }
     
+    size_t GetNumberOfItems() const{
+
+        return _Menu.GetNumberOfItems();
+
+    }
+
 };

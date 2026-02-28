@@ -5,6 +5,7 @@
 #include "..\MenuComponents\clsEasyMenuHeader.h"
 #include "..\MenuComponents\clsEasyMenuFooter.h"
 #include "..\MenuComponents\clsEasyMenuItem.h"
+#include "..\GeneralHelpers\clsStringHelpers.h"
 
 class clsMenu {
 
@@ -34,14 +35,16 @@ public:
         _MenuHeader = Header;
 
     }
-    EasyMenuComponents::clsEasyMenuHeader GetMenuHeader() const { return _MenuHeader; }
+    const EasyMenuComponents::clsEasyMenuHeader& GetMenuHeader() const { return _MenuHeader; }
     
     void SetMenuFooter(const EasyMenuComponents::clsEasyMenuFooter& Footer){
         
         _MenuFooter = Footer;
         
     }
-    EasyMenuComponents::clsEasyMenuFooter GetMenuFooter() const { return _MenuFooter; }
+    const EasyMenuComponents::clsEasyMenuFooter& GetMenuFooter() const { return _MenuFooter; }
+
+    const std::vector<EasyMenuComponents::clsEasyMenuItem>& GetVItems() const { return _vItems; }
 
     // this won't affect the label shown in the default header
     void SetMenuLabel(const std::string& Label){
@@ -132,6 +135,17 @@ public:
         ClearHeader();
         ClearItems();
         ClearFooter();
+
+    }
+
+    size_t GetNumberOfItems() const
+    {
+        return _vItems.size();
+    }
+
+    bool IsEmpty() const{
+
+        return _vItems.empty();
 
     }
 

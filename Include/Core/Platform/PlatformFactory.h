@@ -1,3 +1,5 @@
+#pragma once
+
 // factory function to get the correct Platform
 #include <iostream>
 #include <memory>

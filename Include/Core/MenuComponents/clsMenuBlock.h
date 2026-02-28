@@ -48,13 +48,18 @@ namespace EasyMenuComponents{
     
         }
     
-        void Print(){
-    
-            for (const std::string &Line : _Lines)
-                std::cout << Line << '\n';        
-    
+        const std::vector<std::string>& GetVLines() const{
+
+            return _Lines;
+
         }
     
+        size_t GetNumberOfLines() const {
+
+            return _Lines.size();
+
+        }
+
     };
 
 }

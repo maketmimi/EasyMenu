@@ -2,13 +2,103 @@
 
 #include <iostream>
 #include "IPlatform.h"
-
+#include <conio.h>
+#include <windows.h>
 
 class clsWindowsPlatform : public IPlatform{
 
-    
+    enum enWindowsKeys {
+
+        eUpArrow = 72,
+        eDownArrow = 80,
+        eEnter = 13,
+        eSpecialKeyPrefix = 224
+
+    };
+
+    // initially we will handle this like this but maybe this will be changed in the future
+    const WORD _OriginalConsoleAttributes {_GetCurrentTextAttributes()};
+
+    WORD _GetCurrentTextAttributes(){
+
+        CONSOLE_SCREEN_BUFFER_INFO ConsoleInfo;
+
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &ConsoleInfo);
+
+        return ConsoleInfo.wAttributes;
+    }
+
 public:
 
+    // this should be refactored
+    void ClearScreen() override{
+
+        system("cls");
+
+    }
+
+    enKey ReadKey() override{
+
+        switch (_getch())
+        {
+        case enWindowsKeys::eEnter:
+            return enKey::Enter;
+        case enWindowsKeys::eSpecialKeyPrefix:
+            switch (_getch())
+            {
+            case enWindowsKeys::eUpArrow:
+                return enKey::UpArrow;                
+            case enWindowsKeys::eDownArrow:
+                return enKey::DownArrow;                
+            }
+        }
     
+        return enKey::UnknownKey;
+    }
+
+    void PrepareTerminal() override{
+
+        // nothing for now
+
+    }
+
+    void RestoreTerminal() override{
+
+        // nothing here for now
+
+    }
+
+    stTerminalSize GetTerminalSize() override{
+
+        stTerminalSize CurrentTerminalSize;
+
+        CONSOLE_SCREEN_BUFFER_INFO ConsoleInfo;
+
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &ConsoleInfo);
+
+        CurrentTerminalSize.Rows = ConsoleInfo.srWindow.Bottom - ConsoleInfo.srWindow.Top + 1; 
+        CurrentTerminalSize.Columns = ConsoleInfo.srWindow.Right - ConsoleInfo.srWindow.Left + 1; 
+
+        return CurrentTerminalSize;
+    }
+
+    void ResetOutputToOriginalState() override{
+
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), _OriginalConsoleAttributes);
+
+    }
+
+    void HighlightNextOutput() override{
+
+        WORD CurrentTextAttributes {_GetCurrentTextAttributes()};
+        
+        WORD ForeColor = CurrentTextAttributes & 0x0F;
+        WORD BackGroundColor = CurrentTextAttributes & 0xF0;
+
+        WORD InvertedAttrs {(short unsigned int) ((ForeColor << 4) | (BackGroundColor >> 4))};
+
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), InvertedAttrs);
+
+    }
 
 };

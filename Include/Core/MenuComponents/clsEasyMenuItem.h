@@ -25,15 +25,6 @@ namespace EasyMenuComponents{
         void SetVisibility(bool visible) { _Visible = visible; }
         bool IsVisible() const { return _Visible; }
     
-        // prints item without new line
-        // todo: add styling to how inactive items appear
-        void PrintItem(){
-    
-            if (IsVisible())
-                std::cout << GetLabel();
-    
-        }
-    
     };
 
 }
