@@ -19,10 +19,10 @@ class clsRenderer::clsItemsRenderer::clsItemsPage{
         unsigned short AvalibleLinesForItems {(unsigned short) (CurrentTerminalSize.Rows - MenuBlocksLinesNumber)};
         
         // there is a min value for the number of items in the page which is 2
-        const short MIN_PAGE_SIZE = 2;
+        const unsigned short MIN_PAGE_SIZE = 2;
 
         if (AvalibleLinesForItems > MenuToRender.GetNumberOfItems() || MenuToRender.GetNumberOfItems() < MIN_PAGE_SIZE)
-            return MenuToRender.GetNumberOfItems();
+            return (unsigned short int) MenuToRender.GetNumberOfItems();
         else
             return AvalibleLinesForItems > MIN_PAGE_SIZE ? AvalibleLinesForItems : MIN_PAGE_SIZE;
     
@@ -36,8 +36,8 @@ class clsRenderer::clsItemsRenderer::clsItemsPage{
 
         _PageNumber = SelectedItem / _NumberOfItemsInPage;
         _FirstItemIndex = _NumberOfItemsInPage * _PageNumber;
-        short tempLastItemIndex {(short) (_FirstItemIndex + _NumberOfItemsInPage - 1)};
-        _LastItemIndex = tempLastItemIndex >= MenuToRender.GetVItems().size() ? MenuToRender.GetVItems().size() - 1 : tempLastItemIndex;
+        unsigned short tempLastItemIndex {(unsigned short) (_FirstItemIndex + _NumberOfItemsInPage - 1)};
+        _LastItemIndex = tempLastItemIndex >= MenuToRender.GetVItems().size() ? (unsigned short int) (MenuToRender.GetVItems().size() - 1) : tempLastItemIndex;
 
     }
 

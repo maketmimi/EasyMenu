@@ -32,7 +32,7 @@ class clsNavigator {
         do
         {
             if (SelectedItem == 0)
-                SelectedItem = MenuToNavigate.GetNumberOfItems() - 1;
+                SelectedItem = (unsigned int) MenuToNavigate.GetNumberOfItems() - 1;
             else 
                 SelectedItem--;
         }

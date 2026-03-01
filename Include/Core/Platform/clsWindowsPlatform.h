@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <windows.h>
 #include "IPlatform.h"
 #include <conio.h>
-#include <windows.h>
 #include "..\GeneralHelpers\clsValidate.h"
 
 class clsWindowsPlatform : public IPlatform{
@@ -112,7 +112,7 @@ public:
         if (!clsValidate::IsNumberBetween((int) (CursorInfo.dwSize), 1, 100))
             CursorInfo.dwSize = 25; // this is hardcoded default value in case the value was wrong
 
-        CursorInfo.bVisible = (WINBOOL) Visible;
+        CursorInfo.bVisible = (BOOL) Visible;
 
         SetConsoleCursorInfo(hSTDOutput, &CursorInfo);
 
