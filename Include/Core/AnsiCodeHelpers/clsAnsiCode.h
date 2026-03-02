@@ -32,7 +32,7 @@ public:
 
     static void ClearScreen(){
 
-        std::cout << "\033[2J\033[H";
+        std::cout << "\033[3J\033[2J\033[H";
 
     }
 

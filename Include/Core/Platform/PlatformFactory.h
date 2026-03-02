@@ -18,7 +18,6 @@
 
 #endif
 
-// initial test
 
 std::unique_ptr<IPlatform> CreatePlatform(){
 
