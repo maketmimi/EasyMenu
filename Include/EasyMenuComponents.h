@@ -1,9 +1,9 @@
 #pragma once 
 
 
-#include "Core\MenuComponents\clsEasyMenuHeader.h"
-#include "Core\MenuComponents\clsEasyMenuItem.h"
-#include "Core\MenuComponents\clsEasyMenuFooter.h"
+#include "Core/MenuComponents/clsEasyMenuHeader.h"
+#include "Core/MenuComponents/clsEasyMenuItem.h"
+#include "Core/MenuComponents/clsEasyMenuFooter.h"
 
 /*
 this header is created to expose 

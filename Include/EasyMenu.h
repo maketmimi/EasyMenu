@@ -2,11 +2,11 @@
 
 #include <iostream>
 #include <vector>
-#include "Core\MenuUtils\clsMenu.h"
-#include "Core\MenuUtils\clsNavigator.h"
-#include "Core\Platform\IPlatform.h"
+#include "Core/MenuUtils/clsMenu.h"
+#include "Core/MenuUtils/clsNavigator.h"
+#include "Core/Platform/IPlatform.h"
 #include <memory>
-#include "Core\Platform\PlatformFactory.h"
+#include "Core/Platform/PlatformFactory.h"
 
 class EasyMenu {
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "..\clsRenderer.h"
+#include "Core/MenuUtils/clsRenderer.h"
 #include <memory>
 
 class clsRenderer::clsItemsRenderer{
@@ -37,7 +37,7 @@ class clsRenderer::clsItemsRenderer{
 };
 
 // include nested classes here
-#include "clsItemsPage.h"
+#include "Core/MenuUtils/clsRendererUtils/clsItemsPage.h"
 
 void clsRenderer::clsItemsRenderer::RenderItems(const clsMenu& MenuToRender, unsigned int SelectedItem){
 

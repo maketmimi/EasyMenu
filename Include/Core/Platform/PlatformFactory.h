@@ -1,16 +1,40 @@
 #pragma once
 
 // factory function to get the correct Platform
-#include <iostream>
 #include <memory>
-#include "IPlatform.h"
-#include "clsWindowsPlatform.h"
+#include "Core/Platform/IPlatform.h"
+
+#if defined(_WIN32)
+
+    #include "Core/Platform/clsWindowsPlatform.h"
+
+#elif defined(__unix__) || defined(__linux__) || defined(__APPLE__)
+
+    #include "Core/Platform/clsPOSIXPlatform.h"
+
+#else
+
+    #error "Platform is not compatible with EasyMenu library"
+
+#endif
 
 // initial test
 
 std::unique_ptr<IPlatform> CreatePlatform(){
 
-    return std::make_unique<clsWindowsPlatform>();
+    #if defined(_WIN32)
+
+        return std::make_unique<clsWindowsPlatform>();
+    
+    #elif defined(__unix__) || defined(__linux__) || defined(__APPLE__)
+
+        return std::make_unique<clsPOSIXPlatform>();
+
+    #else
+
+        #error "Platform is not compatible with EasyMenu library"
+    
+    #endif
 
 }
 

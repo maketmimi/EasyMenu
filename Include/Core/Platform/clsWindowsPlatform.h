@@ -1,10 +1,12 @@
 #pragma once
 
+#if defined(_WIN32)
+
 #include <iostream>
 #include <windows.h>
-#include "IPlatform.h"
+#include "Core/Platform/IPlatform.h"
 #include <conio.h>
-#include "..\GeneralHelpers\clsValidate.h"
+#include "Core/GeneralHelpers/clsValidate.h"
 
 class clsWindowsPlatform : public IPlatform{
 
@@ -66,6 +68,7 @@ public:
     void RestoreTerminal() override{
 
         SetCursorVisibility(true);
+        ResetOutputToOriginalState();
 
     }
 
@@ -118,4 +121,13 @@ public:
 
     }
 
+    ~clsWindowsPlatform(){
+
+        RestoreTerminal();
+
+    }
+
 };
+
+
+#endif

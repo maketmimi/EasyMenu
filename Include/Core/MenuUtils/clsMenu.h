@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include <vector>
-#include "..\MenuComponents\clsEasyMenuHeader.h"
-#include "..\MenuComponents\clsEasyMenuFooter.h"
-#include "..\MenuComponents\clsEasyMenuItem.h"
-#include "..\GeneralHelpers\clsStringHelpers.h"
+#include "Core/MenuComponents/clsEasyMenuHeader.h"
+#include "Core/MenuComponents/clsEasyMenuFooter.h"
+#include "Core/MenuComponents/clsEasyMenuItem.h"
+#include "Core/GeneralHelpers/clsStringHelpers.h"
 
 class clsMenu {
 

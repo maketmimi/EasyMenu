@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "clsMenu.h"
-#include "..\MenuComponents\clsEasyMenuItem.h"
+#include "Core/MenuUtils/clsMenu.h"
+#include "Core/MenuComponents/clsEasyMenuItem.h"
 #include <vector>
-#include "..\Platform\IPlatform.h"
+#include "Core/Platform/IPlatform.h"
 #include <memory>
 
 
@@ -36,7 +36,7 @@ public:
 
 
 // include the nested classes definations here
-#include "clsRendererUtils\clsItemsRenderer.h"
+#include "Core/MenuUtils/clsRendererUtils/clsItemsRenderer.h"
 
 
 void clsRenderer::RenderMenu(const clsMenu& MenuToRender, const unsigned int SelectedItem){

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "clsMenu.h"
-#include "clsRenderer.h"
-#include "..\Platform\IPlatform.h"
-#include "..\Platform\PlatformFactory.h"
+#include "Core/MenuUtils/clsMenu.h"
+#include "Core/MenuUtils/clsRenderer.h"
+#include "Core/Platform/IPlatform.h"
+#include "Core/Platform/PlatformFactory.h"
 #include <memory>
 
 class clsNavigator {

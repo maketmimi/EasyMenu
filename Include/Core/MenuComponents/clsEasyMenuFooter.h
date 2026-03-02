@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "clsMenuBlock.h"
+#include "Core/MenuComponents/clsMenuBlock.h"
 
 
 namespace EasyMenuComponents {
