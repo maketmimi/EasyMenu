@@ -25,6 +25,12 @@ namespace EasyMenuComponents{
         void SetVisibility(bool visible) { _Visible = visible; }
         bool IsVisible() const { return _Visible; }
     
+        bool IsNavigable() const {
+
+            return _Visible && _Active;
+
+        }
+
     };
 
 }

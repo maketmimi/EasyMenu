@@ -25,10 +25,12 @@ public:
 
     }
 
-    // this shows the interactive menu and returns what the user selected.
-    unsigned int RunMenu(){
+    /// @brief This method shows the menu to the user and returns the number of the selected item starting from 1
+    /// @param ItemToStartFrom this specifies the number of the item to start from another words the first item to be highlighted defaults to 1 which is the first item
+    /// @return returns the Number of the selected item 
+    unsigned int RunMenu(unsigned int ItemToStartFrom = 1){
 
-        return clsNavigator(*_Platform).GetSelection(_Menu);
+        return clsNavigator(*_Platform).GetSelection(_Menu, ItemToStartFrom);
 
     }
 

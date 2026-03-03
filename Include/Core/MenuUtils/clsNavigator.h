@@ -11,23 +11,18 @@ class clsNavigator {
 
     IPlatform& _Platform;
 
-    bool _IsItemNavigable(const EasyMenuComponents::clsEasyMenuItem& ItemToCheck){
-
-        return ItemToCheck.IsActive() && ItemToCheck.IsVisible();
-
-    }
-
-    void _SelectNextItem(const clsMenu& MenuToNavigate, unsigned int& SelectedItem){
+    unsigned int _SelectNextItem(const clsMenu& MenuToNavigate, unsigned int SelectedItem){
 
         do
         {
-            ++SelectedItem%= MenuToNavigate.GetNumberOfItems();
+            ++SelectedItem %= MenuToNavigate.GetNumberOfItems();
         }
-        while (!_IsItemNavigable(MenuToNavigate.GetItem(SelectedItem)));
+        while (!MenuToNavigate.GetItem(SelectedItem).IsNavigable());
 
+        return SelectedItem;
     }
     
-    void _SelectPreviousItem(const clsMenu& MenuToNavigate, unsigned int& SelectedItem){
+    unsigned int _SelectPreviousItem(const clsMenu& MenuToNavigate, unsigned int SelectedItem){
         
         do
         {
@@ -36,24 +31,48 @@ class clsNavigator {
             else 
                 SelectedItem--;
         }
-        while (!_IsItemNavigable(MenuToNavigate.GetItem(SelectedItem)));
+        while (!MenuToNavigate.GetItem(SelectedItem).IsNavigable());
+
+        return SelectedItem;
+    }
+
+    unsigned int _GetClosestNavigableItemNumber(const clsMenu& MenuToNavigate, unsigned int ItemToStartFrom = 1){
+
+        if (MenuToNavigate.GetItem(ItemToStartFrom).IsNavigable())
+            return ItemToStartFrom;
+        
+        return _SelectNextItem(MenuToNavigate, ItemToStartFrom);
+    }
+
+    unsigned int _GetItemNumberToStartFrom(const clsMenu& MenuToNavigate, unsigned int ItemToStartFrom = 1){
+
+        // note that the items numbering is starting from 0 inside the class and from 1 for the outside users
+        if (ItemToStartFrom < 1)
+            ItemToStartFrom = 0;
+        else
+            ItemToStartFrom--;
+
+        if (MenuToNavigate.IsItemNumberInMenu(ItemToStartFrom))
+            return _GetClosestNavigableItemNumber(MenuToNavigate, ItemToStartFrom);
+        else
+            return _GetClosestNavigableItemNumber(MenuToNavigate, 0);
 
     }
 
     // returns 0 if the Menu is empty
-    unsigned int _NavigateMenu(const clsMenu& MenuToNavigate){
+    unsigned int _NavigateMenu(const clsMenu& MenuToNavigate, unsigned int ItemToStartFrom = 1){
 
         clsRenderer MenuRenderer(_Platform);
         _Platform.PrepareTerminal();
 
-        unsigned int SelectedItem {0};
-        
         if (MenuToNavigate.IsEmpty() || !MenuToNavigate.CheckIfThereIsNavigableItems())
         {
-            MenuRenderer.RenderMenu(MenuToNavigate, SelectedItem); 
+            MenuRenderer.RenderMenu(MenuToNavigate, 0); 
             _Platform.RestoreTerminal();
             return 0; // Can't navigate menu
         }
+        
+        unsigned int SelectedItem {_GetItemNumberToStartFrom(MenuToNavigate, ItemToStartFrom)};
         
         while (true){
 
@@ -64,14 +83,14 @@ class clsNavigator {
             switch (KeyPressed)
             {
             case IPlatform::enKey::UpArrow:
-                _SelectPreviousItem(MenuToNavigate, SelectedItem);
+                SelectedItem = _SelectPreviousItem(MenuToNavigate, SelectedItem);
                 break;
             case IPlatform::enKey::DownArrow:
-                _SelectNextItem(MenuToNavigate, SelectedItem);
+                SelectedItem = _SelectNextItem(MenuToNavigate, SelectedItem);
                 break;
             default:
                 _Platform.RestoreTerminal();
-                return SelectedItem + 1;      
+                return SelectedItem + 1; // note that the items numbering is starting from 0 inside the class and from 1 for the outside users
             }
 
         }
@@ -86,9 +105,9 @@ public:
     // this shows the menu to the user and
     // returns the selected item starting from 1, 
     // and returns 0 if the Menu is empty or can't be navigated ie. "all items are invisible"
-    unsigned int GetSelection(const clsMenu& MenuToNavigate){
+    unsigned int GetSelection(const clsMenu& MenuToNavigate, unsigned int ItemToStartFrom = 1){
 
-        return _NavigateMenu(MenuToNavigate);
+        return _NavigateMenu(MenuToNavigate, ItemToStartFrom);
 
     }
 

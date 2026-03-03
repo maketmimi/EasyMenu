@@ -165,4 +165,10 @@ public:
 
     }
 
+    bool IsItemNumberInMenu(unsigned int ItemNumber) const {
+
+        return ItemNumber < _vItems.size();
+
+    }
+
 };
