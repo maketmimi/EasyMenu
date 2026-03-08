@@ -116,4 +116,10 @@ public:
 
     }
 
+    bool IsEmpty() const {
+
+        return _Menu.IsEmpty();
+
+    }
+
 };

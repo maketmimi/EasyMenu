@@ -14,7 +14,8 @@ class clsRenderer::clsItemsRenderer::clsItemsPage{
         
         IPlatform::stTerminalSize CurrentTerminalSize {_ItemsRenderer._Renderer._Platform.GetTerminalSize()};
         
-        unsigned short MenuBlocksLinesNumber {(unsigned short) (MenuToRender.GetMenuHeader().GetNumberOfLines() + MenuToRender.GetMenuFooter().GetNumberOfLines())};
+        // header lines + footer lines + the end line after the footer
+        unsigned short MenuBlocksLinesNumber {(unsigned short) (MenuToRender.GetMenuHeader().GetNumberOfLines() + MenuToRender.GetMenuFooter().GetNumberOfLines() + 1)};
         
         unsigned short AvalibleLinesForItems {(unsigned short) (CurrentTerminalSize.Rows - MenuBlocksLinesNumber)};
         
