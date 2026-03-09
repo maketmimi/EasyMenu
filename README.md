@@ -16,7 +16,7 @@
  2. Build with your usual C++ toolchain. Example (MinGW/GCC):
 
  ```bash
- g++ -g Testing/Test.cpp -o Testing/Test.exe -I Include
+ g++ Example.cpp -o Example.exe -I Include
  ```
 
  3. Minimal usage example:
@@ -81,18 +81,13 @@
  - [Include/Core/Platform/PlatformFactory.h](Include/Core/Platform/PlatformFactory.h) — platform selection.
 
  ## Extending & Customization
- - You can replace the header/footer or build custom `clsMenuBlock` content and assign it via `SetHeader` / `SetFooter`.
- - To change highlighting / theme behaviour, modify `clsRenderer::clsItemsRenderer::_RenderSingelItem` or implement a themed output wrapper.
+ - You can replace the header/footer or build custom `clsEasyMenuHeader` / `clsEasyMenuFooter` content and assign it via `SetHeader` / `SetFooter`.
 
  ## Contributing
  - Open an issue with a short description and a minimal repro.
  - Pull requests should be focused and include small, testable changes.
 
  ## License
- No license file is included. Add a `LICENSE` file if you want to designate a license (for example, MIT).
+
 
  ---
-
- If you want, I can:
- - run a quick build of `Testing/Test.cpp`, or
- - add a small example `main.cpp` under `Testing/` that demonstrates a complete run.
