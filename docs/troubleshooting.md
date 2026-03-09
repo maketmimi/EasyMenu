@@ -21,12 +21,34 @@ This page covers common issues when using EasyMenu and how to resolve them.
 - Symptom: unresolved externals at link time.
 - Cause: EasyMenu is header-driven; unresolved externals typically come from other sources (e.g., mixing declaration-only headers with missing .cpp files). Ensure you are compiling all project source files and not omitting required translation units. EasyMenu itself does not require additional library linking.
 
-3) Menu does not display correctly on the console
+3) Console Layout Issues
 
-- Symptom: layout is broken, control characters appear, or input doesn't work as expected.
-- Fixes:
-  - Ensure your terminal supports ANSI escape sequences. On Windows, use a terminal that supports ANSI (Windows 10+ terminals or configure the console), or run under an environment (e.g., Git Bash, Windows Terminal).
-  - Try running the example `docs/examples/SimpleMenu.cpp` to verify environment behavior.
+If the menu layout appears broken, misaligned, or does not render correctly, the problem is usually related to the **terminal environment**, not the library itself.
+
+**EasyMenu has been tested in the following environments:**
+
+* Windows **CMD** terminal (Windows 7 and Windows 10)
+* **Windows Terminal**
+* **PowerShell**
+* Linux terminal environments (bash, etc.)
+* macOS Terminal
+
+These environments render the interface correctly.
+
+On Windows, the library **does not rely on ANSI escape codes**, which helps maintain compatibility with older systems such as Windows 7.
+
+However, the **VS Code integrated terminal** may sometimes display incorrect layout or cursor behavior when running console UI programs. Because of this, EasyMenu may not behave reliably inside the VS Code internal terminal on Windows.
+
+If you encounter rendering issues, run your program in a **dedicated terminal window**, such as:
+
+* CMD
+* PowerShell
+* Windows Terminal
+* Linux terminal
+* macOS Terminal
+
+**Note:** The VS Code integrated terminal works correctly when running inside a **Linux environment**, where it has been tested and verified to function properly.
+
 
 4) Items not selectable or off-by-one selection
 
