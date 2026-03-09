@@ -1,3 +1,5 @@
+See the full documentation at [EasyMenu-Documentation](https://maketmimi.github.io/EasyMenu/).
+
 # EasyMenu
 
 EasyMenu is a lightweight, header-only C++ library for creating interactive console menus on Windows and POSIX terminals. It provides a minimal, dependency-free API for building menus with headers, footers, selectable items and automatic pagination.
