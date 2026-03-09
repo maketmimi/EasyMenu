@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyMenu - C++ Console Menu Library</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="quick_start.html">Quick Start</a></li>
+                <li><a href="concepts.html">Concepts</a></li>
+                <li><a href="api/overview.html">API</a></li>
+                <li><a href="examples/basic_example.html">Examples</a></li>
+                <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>EasyMenu</h1>
+            <p class="subtitle">A lightweight, header-only C++ library for building interactive console menus</p>
+            <div class="hero-buttons">
+                <a href="quick_start.html" class="btn btn-primary">Get Started</a>
+                <a href="api/overview.html" class="btn btn-secondary">View API</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <h2>Overview</h2>
+            <p>EasyMenu is a modern, cross-platform C++ library designed to simplify the creation of interactive console menus. With a minimal, dependency-free API, you can quickly build professional menu systems for command-line applications.</p>
+        </section>
+
+        <section class="section">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Header-Only</h3>
+                    <p>No compilation required. Simply include the headers and start building menus immediately.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Cross-Platform</h3>
+                    <p>Works seamlessly on Windows, Linux, and macOS through a unified API.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Simple API</h3>
+                    <p>Intuitive methods for creating, managing, and displaying menus with minimal code.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Adaptive Rendering</h3>
+                    <p>Automatically adjusts to terminal size with paginated item display.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Customizable</h3>
+                    <p>Flexible header and footer components for complete visual control.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Zero Dependencies</h3>
+                    <p>No external libraries required. Pure C++ standard library implementation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Quick Example</h2>
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Main Menu");
+
+    menu.AddItem("New Game");
+    menu.AddItem("Load Game");
+    menu.AddItem("Settings");
+    menu.AddItem("Exit");
+
+    unsigned int choice = menu.RunMenu();
+
+    if (choice &gt; 0) {
+        std::cout &lt;&lt; "You selected: " &lt;&lt; choice &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Getting Started</h2>
+            <p>Ready to start building console menus? Follow these steps:</p>
+            <ol>
+                <li><a href="installation.html">Install the library</a> by including the headers in your project</li>
+                <li>Follow the <a href="quick_start.html">Quick Start Guide</a> to create your first menu</li>
+                <li>Explore the <a href="api/overview.html">API Documentation</a> for advanced features</li>
+                <li>Check out <a href="examples/basic_example.html">examples</a> for common use cases</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>Platform Support</h2>
+            <p>EasyMenu has been tested and verified on:</p>
+            <ul>
+                <li>Windows 7 and Windows 10 (CMD, PowerShell, Windows Terminal)</li>
+                <li>Linux (bash and other common shells)</li>
+                <li>macOS Terminal</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>License</h2>
+            <p>EasyMenu is released under the MIT License. You are free to use, modify, and distribute this library in both personal and commercial projects.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

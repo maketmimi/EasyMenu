@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes Reference - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../quick_start.html">Quick Start</a></li>
+                <li><a href="../concepts.html">Concepts</a></li>
+                <li><a href="overview.html">API</a></li>
+                <li><a href="../examples/basic_example.html">Examples</a></li>
+                <li><a href="../troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Classes Reference</h2>
+            <p>This page provides detailed documentation for all public classes in the EasyMenu library.</p>
+        </section>
+
+        <section class="section">
+            <h2>EasyMenu Class</h2>
+            <p><strong>Header:</strong> <code>EasyMenu.h</code></p>
+            <p>The <code>EasyMenu</code> class is the primary interface for creating and managing interactive console menus. It provides methods for adding items, customizing appearance, and displaying the menu to users.</p>
+
+            <h3>Constructors</h3>
+
+            <h4>EasyMenu()</h4>
+            <pre><code class="language-cpp">EasyMenu()</code></pre>
+            <p>Creates an empty menu without a default header or footer.</p>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">EasyMenu menu;
+menu.AddItem("Item 1");
+menu.AddItem("Item 2");</code></pre>
+
+            <h4>EasyMenu(const std::string& MenuLabel)</h4>
+            <pre><code class="language-cpp">EasyMenu(const std::string& MenuLabel)</code></pre>
+            <p>Creates a menu with a default header displaying the menu label and a default footer.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>MenuLabel</code> - The title/label for the menu, displayed in the default header</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">EasyMenu menu("Main Menu");
+// Automatically includes a formatted header with "Main Menu"</code></pre>
+
+            <h3>Menu Execution</h3>
+
+            <h4>RunMenu()</h4>
+            <pre><code class="language-cpp">unsigned int RunMenu(unsigned int ItemToStartFrom = 1)</code></pre>
+            <p>Displays the menu and allows the user to navigate and select an item. This method blocks until the user makes a selection.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>ItemToStartFrom</code> - (Optional) The item number to highlight when the menu first appears. Defaults to 1 (first item).</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li>The 1-based index of the selected item (1, 2, 3, ...)</li>
+                <li><code>0</code> if the menu is empty or contains no navigable items</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">unsigned int choice = menu.RunMenu();
+
+if (choice == 0) {
+    std::cout &lt;&lt; "Menu is empty" &lt;&lt; std::endl;
+} else {
+    std::cout &lt;&lt; "Selected: " &lt;&lt; choice &lt;&lt; std::endl;
+}
+
+// Start with the third item highlighted
+unsigned int choice2 = menu.RunMenu(3);</code></pre>
+
+            <h3>Item Management</h3>
+
+            <h4>AddItem()</h4>
+            <pre><code class="language-cpp">void AddItem(const std::string& Label, bool Active = true, bool Visible = true)</code></pre>
+            <p>Adds a new item to the end of the menu.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>Label</code> - The text to display for this item</li>
+                <li><code>Active</code> - (Optional) Whether the item can be selected. Defaults to <code>true</code></li>
+                <li><code>Visible</code> - (Optional) Whether the item is displayed. Defaults to <code>true</code></li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">menu.AddItem("Play");                    // Active and visible
+menu.AddItem("Options", true, true);     // Explicitly active and visible
+menu.AddItem("Coming Soon", false, true); // Visible but not selectable
+menu.AddItem("Debug", true, false);      // Hidden item</code></pre>
+
+            <h4>UpdateItem()</h4>
+            <pre><code class="language-cpp">bool UpdateItem(size_t ItemNumber, const std::string& Label, bool Active = true, bool Visible = true)</code></pre>
+            <p>Updates an existing menu item with new properties.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>ItemNumber</code> - The 1-based index of the item to update</li>
+                <li><code>Label</code> - The new text for the item</li>
+                <li><code>Active</code> - (Optional) Whether the item can be selected</li>
+                <li><code>Visible</code> - (Optional) Whether the item is displayed</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li><code>true</code> if the update was successful</li>
+                <li><code>false</code> if the item number is out of range</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">if (menu.UpdateItem(2, "Updated Label", true, true)) {
+    std::cout &lt;&lt; "Item updated" &lt;&lt; std::endl;
+} else {
+    std::cout &lt;&lt; "Item does not exist" &lt;&lt; std::endl;
+}</code></pre>
+
+            <h4>RemoveItem()</h4>
+            <pre><code class="language-cpp">bool RemoveItem(size_t ItemNumber)</code></pre>
+            <p>Removes an item from the menu. Subsequent items shift down to fill the gap.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>ItemNumber</code> - The 1-based index of the item to remove</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li><code>true</code> if the item was removed</li>
+                <li><code>false</code> if the item number is out of range</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">if (menu.RemoveItem(3)) {
+    std::cout &lt;&lt; "Item 3 removed" &lt;&lt; std::endl;
+}</code></pre>
+
+            <h4>SetVisibility()</h4>
+            <pre><code class="language-cpp">bool SetVisibility(size_t ItemNumber, bool Visible)</code></pre>
+            <p>Shows or hides a specific menu item.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>ItemNumber</code> - The 1-based index of the item</li>
+                <li><code>Visible</code> - <code>true</code> to show the item, <code>false</code> to hide it</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li><code>true</code> if the visibility was changed</li>
+                <li><code>false</code> if the item number is out of range</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">// Hide item 4
+menu.SetVisibility(4, false);
+
+// Show item 4
+menu.SetVisibility(4, true);</code></pre>
+
+            <h4>SetActivity()</h4>
+            <pre><code class="language-cpp">bool SetActivity(size_t ItemNumber, bool Active)</code></pre>
+            <p>Makes an item selectable or non-selectable. Inactive items are still visible but cannot be chosen.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>ItemNumber</code> - The 1-based index of the item</li>
+                <li><code>Active</code> - <code>true</code> to make selectable, <code>false</code> to disable</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li><code>true</code> if the activity state was changed</li>
+                <li><code>false</code> if the item number is out of range</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">// Disable item 2 (visible but not selectable)
+menu.SetActivity(2, false);
+
+// Enable item 2
+menu.SetActivity(2, true);</code></pre>
+
+            <h4>ClearItems()</h4>
+            <pre><code class="language-cpp">void ClearItems()</code></pre>
+            <p>Removes all items from the menu.</p>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">menu.ClearItems();
+// Menu now has no items</code></pre>
+
+            <h3>Header and Footer Management</h3>
+
+            <h4>SetHeader()</h4>
+            <pre><code class="language-cpp">void SetHeader(const EasyMenuComponents::clsEasyMenuHeader& Header)</code></pre>
+            <p>Sets a custom header for the menu.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>Header</code> - A custom header object created using <code>EasyMenuComponents::clsEasyMenuHeader</code></li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">#include &lt;EasyMenuComponents.h&gt;
+
+EasyMenuComponents::clsEasyMenuHeader header;
+header.AddLine("======================");
+header.AddLine("  Custom Application");
+header.AddLine("======================");
+
+menu.SetHeader(header);</code></pre>
+
+            <h4>GetHeader()</h4>
+            <pre><code class="language-cpp">const EasyMenuComponents::clsEasyMenuHeader& GetHeader() const</code></pre>
+            <p>Retrieves the current header object.</p>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li>A const reference to the menu's header</li>
+            </ul>
+
+            <h4>SetFooter()</h4>
+            <pre><code class="language-cpp">void SetFooter(const EasyMenuComponents::clsEasyMenuFooter& Footer)</code></pre>
+            <p>Sets a custom footer for the menu.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>Footer</code> - A custom footer object created using <code>EasyMenuComponents::clsEasyMenuFooter</code></li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">#include &lt;EasyMenuComponents.h&gt;
+
+EasyMenuComponents::clsEasyMenuFooter footer;
+footer.AddLine("======================");
+footer.AddLine("Press Enter to select");
+footer.AddLine("======================");
+
+menu.SetFooter(footer);</code></pre>
+
+            <h4>GetFooter()</h4>
+            <pre><code class="language-cpp">const EasyMenuComponents::clsEasyMenuFooter& GetFooter() const</code></pre>
+            <p>Retrieves the current footer object.</p>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li>A const reference to the menu's footer</li>
+            </ul>
+
+            <h4>ClearHeader()</h4>
+            <pre><code class="language-cpp">void ClearHeader()</code></pre>
+            <p>Removes the header from the menu.</p>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">menu.ClearHeader();
+// Menu now has no header</code></pre>
+
+            <h4>ClearFooter()</h4>
+            <pre><code class="language-cpp">void ClearFooter()</code></pre>
+            <p>Removes the footer from the menu.</p>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">menu.ClearFooter();
+// Menu now has no footer</code></pre>
+
+            <h4>ClearMenu()</h4>
+            <pre><code class="language-cpp">void ClearMenu()</code></pre>
+            <p>Removes all items, the header, and the footer from the menu, resetting it to an empty state.</p>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">menu.ClearMenu();
+// Menu is now completely empty</code></pre>
+
+            <h3>Menu Inspection</h3>
+
+            <h4>GetNumberOfItems()</h4>
+            <pre><code class="language-cpp">size_t GetNumberOfItems() const</code></pre>
+            <p>Returns the total number of items in the menu, including hidden and inactive items.</p>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li>The number of items</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">std::cout &lt;&lt; "Menu has " &lt;&lt; menu.GetNumberOfItems() &lt;&lt; " items" &lt;&lt; std::endl;</code></pre>
+
+            <h4>IsEmpty()</h4>
+            <pre><code class="language-cpp">bool IsEmpty() const</code></pre>
+            <p>Checks whether the menu has any items.</p>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li><code>true</code> if the menu has no items</li>
+                <li><code>false</code> if the menu has at least one item</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">if (menu.IsEmpty()) {
+    std::cout &lt;&lt; "Please add items to the menu" &lt;&lt; std::endl;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>EasyMenuComponents::clsEasyMenuHeader</h2>
+            <p><strong>Header:</strong> <code>EasyMenuComponents.h</code></p>
+            <p>This class represents a custom header for a menu. A header consists of multiple lines of text displayed at the top of the menu.</p>
+
+            <h3>Static Methods</h3>
+
+            <h4>GetDefaultHeader()</h4>
+            <pre><code class="language-cpp">static clsEasyMenuHeader GetDefaultHeader(const std::string& Label = "Easy Menu")</code></pre>
+            <p>Creates a default header with a label.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>Label</code> - (Optional) The text to display in the header. Defaults to "Easy Menu"</li>
+            </ul>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li>A header object with formatted default styling</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">auto header = EasyMenuComponents::clsEasyMenuHeader::GetDefaultHeader("My App");
+menu.SetHeader(header);</code></pre>
+
+            <h3>Instance Methods</h3>
+
+            <h4>AddLine()</h4>
+            <pre><code class="language-cpp">void AddLine(const std::string& Line)</code></pre>
+            <p>Adds a line of text to the header.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>Line</code> - The text to add</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">EasyMenuComponents::clsEasyMenuHeader header;
+header.AddLine("====================");
+header.AddLine("  Welcome!");
+header.AddLine("====================");
+
+menu.SetHeader(header);</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>EasyMenuComponents::clsEasyMenuFooter</h2>
+            <p><strong>Header:</strong> <code>EasyMenuComponents.h</code></p>
+            <p>This class represents a custom footer for a menu. A footer consists of multiple lines of text displayed at the bottom of the menu.</p>
+
+            <h3>Static Methods</h3>
+
+            <h4>GetDefaultFooter()</h4>
+            <pre><code class="language-cpp">static clsEasyMenuFooter GetDefaultFooter()</code></pre>
+            <p>Creates a default footer with standard formatting.</p>
+            <p><strong>Returns:</strong></p>
+            <ul>
+                <li>A footer object with default styling</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">auto footer = EasyMenuComponents::clsEasyMenuFooter::GetDefaultFooter();
+menu.SetFooter(footer);</code></pre>
+
+            <h3>Instance Methods</h3>
+
+            <h4>AddLine()</h4>
+            <pre><code class="language-cpp">void AddLine(const std::string& Line)</code></pre>
+            <p>Adds a line of text to the footer.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>Line</code> - The text to add</li>
+            </ul>
+            <p><strong>Example:</strong></p>
+            <pre><code class="language-cpp">EasyMenuComponents::clsEasyMenuFooter footer;
+footer.AddLine("====================");
+footer.AddLine("Use arrows to navigate");
+footer.AddLine("====================");
+
+menu.SetFooter(footer);</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Complete Example</h2>
+            <p>Here's a comprehensive example using multiple API features:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+#include &lt;EasyMenuComponents.h&gt;
+
+int main() {
+    // Create menu with custom header
+    EasyMenu menu;
+
+    EasyMenuComponents::clsEasyMenuHeader header;
+    header.AddLine("========================");
+    header.AddLine("   Game Settings Menu");
+    header.AddLine("========================");
+    menu.SetHeader(header);
+
+    // Add items with different states
+    menu.AddItem("Video Settings");
+    menu.AddItem("Audio Settings");
+    menu.AddItem("Controls");
+    menu.AddItem("Multiplayer", false, true); // Inactive
+    menu.AddItem("Apply Changes");
+    menu.AddItem("Back");
+
+    // Check menu state
+    std::cout &lt;&lt; "Menu has " &lt;&lt; menu.GetNumberOfItems()
+              &lt;&lt; " items" &lt;&lt; std::endl;
+
+    // Run menu starting from item 1
+    unsigned int choice = menu.RunMenu(1);
+
+    if (choice == 0) {
+        std::cout &lt;&lt; "No selection made" &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "Selected option: " &lt;&lt; choice &lt;&lt; std::endl;
+
+        // Handle specific choices
+        switch (choice) {
+            case 1:
+                std::cout &lt;&lt; "Opening video settings..." &lt;&lt; std::endl;
+                break;
+            case 5:
+                std::cout &lt;&lt; "Applying changes..." &lt;&lt; std::endl;
+                break;
+            case 6:
+                std::cout &lt;&lt; "Returning to main menu..." &lt;&lt; std::endl;
+                break;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="installation.html" class="active">Installation</a></li>
+                <li><a href="quick_start.html">Quick Start</a></li>
+                <li><a href="concepts.html">Concepts</a></li>
+                <li><a href="api/overview.html">API</a></li>
+                <li><a href="examples/basic_example.html">Examples</a></li>
+                <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Installation</h2>
+            <p>EasyMenu is a header-only library, which means you don't need to compile or link against any separate library files. Simply include the headers in your project and start using the library immediately.</p>
+        </section>
+
+        <section class="section">
+            <h2>Requirements</h2>
+            <ul>
+                <li>C++11 or later compiler</li>
+                <li>Standard C++ library</li>
+                <li>Supported platforms: Windows, Linux, macOS</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Getting the Library</h2>
+            <p>Download or clone the EasyMenu library from the repository. The public API is located in the <code>Include/</code> folder, which contains all the headers you need to use the library.</p>
+        </section>
+
+        <section class="section">
+            <h2>Using EasyMenu with g++ (GCC)</h2>
+            <p>To use EasyMenu with g++ or other command-line compilers, you need to tell the compiler where to find the library headers using the <code>-I</code> (include path) flag.</p>
+
+            <h3>Basic Compilation</h3>
+            <p>If you have a source file <code>main.cpp</code> that uses EasyMenu, compile it like this:</p>
+
+            <pre><code class="language-cpp">g++ main.cpp -o myprogram -I path/to/EasyMenu/Include</code></pre>
+
+            <h3>Understanding the -I Flag</h3>
+            <p>The <code>-I</code> flag tells the compiler to add the specified directory to the list of paths it searches when looking for header files. This allows you to use:</p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenu.h&gt;</code></pre>
+
+            <p>in your code, and the compiler will find it in the path you specified.</p>
+
+            <h3>Example Project Structure</h3>
+            <pre><code>MyProject/
+├── src/
+│   └── main.cpp
+├── lib/
+│   └── EasyMenu/
+│       └── Include/
+│           ├── EasyMenu.h
+│           └── EasyMenuComponents.h
+└── build/</code></pre>
+
+            <h3>Compilation Command for Above Structure</h3>
+            <pre><code class="language-cpp">g++ src/main.cpp -o build/myprogram -I lib/EasyMenu/Include</code></pre>
+
+            <h3>Minimal Working Example</h3>
+            <p>Create a file called <code>main.cpp</code>:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Test Menu");
+    menu.AddItem("Option 1");
+    menu.AddItem("Option 2");
+    menu.AddItem("Exit");
+
+    unsigned int choice = menu.RunMenu();
+    std::cout &lt;&lt; "You selected: " &lt;&lt; choice &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+            <p>Compile and run:</p>
+            <pre><code class="language-cpp">g++ main.cpp -o test -I path/to/EasyMenu/Include
+./test</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Using EasyMenu with Visual Studio</h2>
+            <p>Visual Studio users have two convenient methods for including EasyMenu in their projects. Choose the method that best fits your project structure.</p>
+
+            <h3>Method 1: Copy the Include Folder Into Your Project</h3>
+            <p>This method is straightforward and keeps the library self-contained within your project.</p>
+
+            <h4>Steps</h4>
+            <ol>
+                <li>Copy the <code>Include/</code> folder from the EasyMenu library into your Visual Studio project directory.</li>
+                <li>Your project structure should look like this:</li>
+            </ol>
+
+            <pre><code>MyProject/
+├── MyProject.vcxproj
+├── main.cpp
+└── Include/
+    ├── EasyMenu.h
+    ├── EasyMenuComponents.h
+    └── Core/
+        └── ...</code></pre>
+
+            <h4>Using the Headers</h4>
+            <p>Visual Studio automatically searches the project directory for headers, so you can include the library using a relative path:</p>
+
+            <pre><code class="language-cpp">#include "Include/EasyMenu.h"</code></pre>
+
+            <p>Or, if you prefer, you can use:</p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenu.h&gt;</code></pre>
+
+            <p>Visual Studio will find the headers in the <code>Include/</code> folder automatically.</p>
+
+            <h4>When to Use This Method</h4>
+            <ul>
+                <li>Simple, single-project solutions</li>
+                <li>When you want the library to be self-contained within the project</li>
+                <li>For quick prototyping and testing</li>
+            </ul>
+
+            <h3>Method 2: Add Include Path in Visual Studio Settings</h3>
+            <p>This method is recommended when you store libraries in a central location outside your project directory, or when multiple projects share the same library installation.</p>
+
+            <h4>Step-by-Step Instructions</h4>
+            <ol>
+                <li>Open your project in Visual Studio.</li>
+                <li>In the <strong>Solution Explorer</strong>, right-click on your project name and select <strong>Properties</strong>.</li>
+                <li>In the Property Pages dialog, navigate to:
+                    <pre><code>Configuration Properties
+→ C/C++
+→ General
+→ Additional Include Directories</code></pre>
+                </li>
+                <li>Click on the dropdown next to <strong>Additional Include Directories</strong> and select <strong>&lt;Edit...&gt;</strong>.</li>
+                <li>Click the <strong>New Line</strong> button (folder icon) and add the path to the EasyMenu <code>Include</code> folder.</li>
+            </ol>
+
+            <h4>Example Path</h4>
+            <p>If you have EasyMenu stored in <code>C:\Libraries\EasyMenu</code>, add:</p>
+            <pre><code>C:\Libraries\EasyMenu\Include</code></pre>
+
+            <h4>Using the Headers</h4>
+            <p>After configuring the include path, you can include the library headers using standard angle brackets:</p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenu.h&gt;
+#include &lt;EasyMenuComponents.h&gt;</code></pre>
+
+            <h4>When to Use This Method</h4>
+            <ul>
+                <li>When the library is stored outside your project directory</li>
+                <li>When multiple projects share the same library installation</li>
+                <li>For professional development environments with centralized library management</li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> Make sure to set the include path for all configurations you plan to use (Debug, Release, etc.). You can select "All Configurations" from the Configuration dropdown at the top of the Property Pages dialog.
+            </div>
+
+            <h3>Visual Studio Example Program</h3>
+            <p>Create a new Console Application project and add this code to your <code>main.cpp</code>:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Visual Studio Test");
+
+    menu.AddItem("Create new file");
+    menu.AddItem("Open existing file");
+    menu.AddItem("Save file");
+    menu.AddItem("Exit");
+
+    unsigned int selection = menu.RunMenu();
+
+    if (selection &gt; 0) {
+        std::cout &lt;&lt; "You selected option: " &lt;&lt; selection &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "No selection made." &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+            <p>Build and run the project (F5 or Ctrl+F5).</p>
+        </section>
+
+        <section class="section">
+            <h2>Verifying Installation</h2>
+            <p>To verify that EasyMenu is correctly installed and configured:</p>
+            <ol>
+                <li>Create a simple test program that includes <code>EasyMenu.h</code></li>
+                <li>Compile the program using your chosen method</li>
+                <li>If compilation succeeds without errors, the library is correctly installed</li>
+                <li>Run the program to verify that the menu displays correctly</li>
+            </ol>
+
+            <div class="alert alert-success">
+                <strong>Success!</strong> If your program compiles and runs without errors, EasyMenu is ready to use in your project.
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Next Steps</h2>
+            <p>Now that you have EasyMenu installed, you can:</p>
+            <ul>
+                <li><a href="quick_start.html">Follow the Quick Start guide</a> to create your first menu</li>
+                <li><a href="api/overview.html">Explore the API documentation</a> to learn about all available features</li>
+                <li><a href="examples/basic_example.html">View examples</a> for common use cases</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

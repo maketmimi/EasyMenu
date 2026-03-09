@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../quick_start.html">Quick Start</a></li>
+                <li><a href="../concepts.html">Concepts</a></li>
+                <li><a href="../api/overview.html">API</a></li>
+                <li><a href="basic_example.html" class="active">Examples</a></li>
+                <li><a href="../troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Practical Examples</h2>
+            <p>This page demonstrates common use cases and patterns for using EasyMenu in your applications.</p>
+        </section>
+
+        <section class="section">
+            <h2>Simple Menu Application</h2>
+            <p>A basic menu with a few options demonstrating the fundamental usage pattern:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Main Menu");
+
+    menu.AddItem("Start Application");
+    menu.AddItem("View Help");
+    menu.AddItem("About");
+    menu.AddItem("Exit");
+
+    unsigned int choice = menu.RunMenu();
+
+    switch (choice) {
+        case 1:
+            std::cout &lt;&lt; "Starting application..." &lt;&lt; std::endl;
+            break;
+        case 2:
+            std::cout &lt;&lt; "Displaying help..." &lt;&lt; std::endl;
+            break;
+        case 3:
+            std::cout &lt;&lt; "About: EasyMenu Demo v1.0" &lt;&lt; std::endl;
+            break;
+        case 4:
+            std::cout &lt;&lt; "Goodbye!" &lt;&lt; std::endl;
+            break;
+        default:
+            std::cout &lt;&lt; "No selection made." &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Menu Loop Pattern</h2>
+            <p>An application that repeatedly displays a menu until the user chooses to exit:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+void performAction1() {
+    std::cout &lt;&lt; "\nPerforming Action 1..." &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Press Enter to continue...";
+    std::cin.ignore();
+    std::cin.get();
+}
+
+void performAction2() {
+    std::cout &lt;&lt; "\nPerforming Action 2..." &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Press Enter to continue...";
+    std::cin.ignore();
+    std::cin.get();
+}
+
+void showData() {
+    std::cout &lt;&lt; "\nDisplaying data..." &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Data: [Sample Information]" &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Press Enter to continue...";
+    std::cin.ignore();
+    std::cin.get();
+}
+
+int main() {
+    EasyMenu menu("Application Menu");
+
+    menu.AddItem("Action 1");
+    menu.AddItem("Action 2");
+    menu.AddItem("View Data");
+    menu.AddItem("Exit");
+
+    bool running = true;
+
+    while (running) {
+        unsigned int choice = menu.RunMenu();
+
+        switch (choice) {
+            case 1:
+                performAction1();
+                break;
+            case 2:
+                performAction2();
+                break;
+            case 3:
+                showData();
+                break;
+            case 4:
+                std::cout &lt;&lt; "Exiting application..." &lt;&lt; std::endl;
+                running = false;
+                break;
+            default:
+                running = false;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Dynamic Menu Updates</h2>
+            <p>Modifying menu items based on application state:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Dynamic Menu");
+
+    bool featureEnabled = false;
+
+    menu.AddItem("Enable Feature");
+    menu.AddItem("Use Feature", false, true); // Initially inactive
+    menu.AddItem("Exit");
+
+    bool running = true;
+
+    while (running) {
+        unsigned int choice = menu.RunMenu();
+
+        switch (choice) {
+            case 1:
+                featureEnabled = true;
+                menu.UpdateItem(1, "Disable Feature");
+                menu.SetActivity(2, true); // Enable "Use Feature"
+                std::cout &lt;&lt; "Feature enabled!" &lt;&lt; std::endl;
+                std::cin.ignore();
+                std::cin.get();
+                break;
+            case 2:
+                if (featureEnabled) {
+                    std::cout &lt;&lt; "Using feature..." &lt;&lt; std::endl;
+                    std::cin.ignore();
+                    std::cin.get();
+                }
+                break;
+            case 3:
+                running = false;
+                break;
+            default:
+                running = false;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Custom Header and Footer</h2>
+            <p>Creating a menu with custom header and footer components:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+#include &lt;EasyMenuComponents.h&gt;
+
+int main() {
+    EasyMenu menu;
+
+    // Create custom header
+    EasyMenuComponents::clsEasyMenuHeader header;
+    header.AddLine("================================");
+    header.AddLine("    File Management System");
+    header.AddLine("         Version 2.0");
+    header.AddLine("================================");
+    menu.SetHeader(header);
+
+    // Create custom footer
+    EasyMenuComponents::clsEasyMenuFooter footer;
+    footer.AddLine("================================");
+    footer.AddLine("Use Arrow Keys to Navigate");
+    footer.AddLine("Press Enter to Select");
+    footer.AddLine("================================");
+    menu.SetFooter(footer);
+
+    // Add menu items
+    menu.AddItem("Create New File");
+    menu.AddItem("Open File");
+    menu.AddItem("Save File");
+    menu.AddItem("Delete File");
+    menu.AddItem("Exit");
+
+    unsigned int choice = menu.RunMenu();
+
+    if (choice &gt; 0) {
+        std::cout &lt;&lt; "You selected option: " &lt;&lt; choice &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Conditional Item Visibility</h2>
+            <p>Showing or hiding menu items based on application state:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("User Menu");
+
+    bool isAdmin = false; // Simulate user permissions
+
+    menu.AddItem("View Profile");
+    menu.AddItem("Edit Settings");
+    menu.AddItem("Admin Panel", true, isAdmin); // Hidden for non-admins
+    menu.AddItem("Logout");
+
+    bool running = true;
+
+    while (running) {
+        unsigned int choice = menu.RunMenu();
+
+        switch (choice) {
+            case 1:
+                std::cout &lt;&lt; "Viewing profile..." &lt;&lt; std::endl;
+                std::cin.ignore();
+                std::cin.get();
+                break;
+            case 2:
+                std::cout &lt;&lt; "Editing settings..." &lt;&lt; std::endl;
+                std::cin.ignore();
+                std::cin.get();
+                break;
+            case 3:
+                if (isAdmin) {
+                    std::cout &lt;&lt; "Opening admin panel..." &lt;&lt; std::endl;
+                    std::cin.ignore();
+                    std::cin.get();
+                }
+                break;
+            case 4:
+                std::cout &lt;&lt; "Logging out..." &lt;&lt; std::endl;
+                running = false;
+                break;
+            default:
+                running = false;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Multi-Level Menu System</h2>
+            <p>Creating a hierarchical menu system with submenus:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+void settingsMenu() {
+    EasyMenu menu("Settings");
+
+    menu.AddItem("Display Settings");
+    menu.AddItem("Audio Settings");
+    menu.AddItem("Network Settings");
+    menu.AddItem("Back to Main Menu");
+
+    unsigned int choice = menu.RunMenu();
+
+    switch (choice) {
+        case 1:
+            std::cout &lt;&lt; "Display settings..." &lt;&lt; std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            break;
+        case 2:
+            std::cout &lt;&lt; "Audio settings..." &lt;&lt; std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            break;
+        case 3:
+            std::cout &lt;&lt; "Network settings..." &lt;&lt; std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            break;
+    }
+}
+
+void helpMenu() {
+    EasyMenu menu("Help");
+
+    menu.AddItem("Getting Started");
+    menu.AddItem("FAQ");
+    menu.AddItem("Contact Support");
+    menu.AddItem("Back to Main Menu");
+
+    unsigned int choice = menu.RunMenu();
+
+    switch (choice) {
+        case 1:
+            std::cout &lt;&lt; "Getting started guide..." &lt;&lt; std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            break;
+        case 2:
+            std::cout &lt;&lt; "Frequently asked questions..." &lt;&lt; std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            break;
+        case 3:
+            std::cout &lt;&lt; "Contact: support@example.com" &lt;&lt; std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            break;
+    }
+}
+
+int main() {
+    EasyMenu mainMenu("Main Menu");
+
+    mainMenu.AddItem("Start");
+    mainMenu.AddItem("Settings");
+    mainMenu.AddItem("Help");
+    mainMenu.AddItem("Exit");
+
+    bool running = true;
+
+    while (running) {
+        unsigned int choice = mainMenu.RunMenu();
+
+        switch (choice) {
+            case 1:
+                std::cout &lt;&lt; "Starting application..." &lt;&lt; std::endl;
+                std::cin.ignore();
+                std::cin.get();
+                break;
+            case 2:
+                settingsMenu();
+                break;
+            case 3:
+                helpMenu();
+                break;
+            case 4:
+                std::cout &lt;&lt; "Goodbye!" &lt;&lt; std::endl;
+                running = false;
+                break;
+            default:
+                running = false;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Error Handling Pattern</h2>
+            <p>Proper error handling when modifying menu items:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Item Management Demo");
+
+    menu.AddItem("Item 1");
+    menu.AddItem("Item 2");
+    menu.AddItem("Item 3");
+
+    // Safe item update
+    if (menu.UpdateItem(2, "Modified Item 2")) {
+        std::cout &lt;&lt; "Item 2 updated successfully" &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "Failed to update item 2" &lt;&lt; std::endl;
+    }
+
+    // Attempting to update non-existent item
+    if (!menu.UpdateItem(10, "Non-existent")) {
+        std::cout &lt;&lt; "Item 10 does not exist" &lt;&lt; std::endl;
+    }
+
+    // Safe item removal
+    if (menu.RemoveItem(3)) {
+        std::cout &lt;&lt; "Item 3 removed successfully" &lt;&lt; std::endl;
+    }
+
+    // Check menu state before running
+    if (menu.IsEmpty()) {
+        std::cout &lt;&lt; "Menu is empty!" &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "Menu has " &lt;&lt; menu.GetNumberOfItems()
+                  &lt;&lt; " items" &lt;&lt; std::endl;
+
+        unsigned int choice = menu.RunMenu();
+
+        if (choice == 0) {
+            std::cout &lt;&lt; "No selection (menu empty or not navigable)"
+                      &lt;&lt; std::endl;
+        } else {
+            std::cout &lt;&lt; "Selected: " &lt;&lt; choice &lt;&lt; std::endl;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Complete Application Example</h2>
+            <p>A fully functional task management application using EasyMenu:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;EasyMenu.h&gt;
+
+struct Task {
+    std::string description;
+    bool completed;
+};
+
+std::vector&lt;Task&gt; tasks;
+
+void addTask() {
+    std::cout &lt;&lt; "\nEnter task description: ";
+    std::string desc;
+    std::cin.ignore();
+    std::getline(std::cin, desc);
+
+    tasks.push_back({desc, false});
+    std::cout &lt;&lt; "Task added successfully!" &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Press Enter to continue...";
+    std::cin.get();
+}
+
+void viewTasks() {
+    std::cout &lt;&lt; "\n=== Task List ===" &lt;&lt; std::endl;
+
+    if (tasks.empty()) {
+        std::cout &lt;&lt; "No tasks available." &lt;&lt; std::endl;
+    } else {
+        for (size_t i = 0; i &lt; tasks.size(); ++i) {
+            std::cout &lt;&lt; (i + 1) &lt;&lt; ". ";
+            std::cout &lt;&lt; (tasks[i].completed ? "[X] " : "[ ] ");
+            std::cout &lt;&lt; tasks[i].description &lt;&lt; std::endl;
+        }
+    }
+
+    std::cout &lt;&lt; "\nPress Enter to continue...";
+    std::cin.ignore();
+    std::cin.get();
+}
+
+void markComplete() {
+    if (tasks.empty()) {
+        std::cout &lt;&lt; "\nNo tasks to mark as complete." &lt;&lt; std::endl;
+        std::cout &lt;&lt; "Press Enter to continue...";
+        std::cin.ignore();
+        std::cin.get();
+        return;
+    }
+
+    std::cout &lt;&lt; "\nEnter task number to mark complete: ";
+    int taskNum;
+    std::cin &gt;&gt; taskNum;
+
+    if (taskNum &gt; 0 && taskNum &lt;= (int)tasks.size()) {
+        tasks[taskNum - 1].completed = true;
+        std::cout &lt;&lt; "Task marked as complete!" &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "Invalid task number." &lt;&lt; std::endl;
+    }
+
+    std::cout &lt;&lt; "Press Enter to continue...";
+    std::cin.ignore();
+    std::cin.get();
+}
+
+int main() {
+    EasyMenu menu("Task Manager");
+
+    menu.AddItem("Add New Task");
+    menu.AddItem("View All Tasks");
+    menu.AddItem("Mark Task Complete");
+    menu.AddItem("Exit");
+
+    bool running = true;
+
+    while (running) {
+        unsigned int choice = menu.RunMenu();
+
+        switch (choice) {
+            case 1:
+                addTask();
+                break;
+            case 2:
+                viewTasks();
+                break;
+            case 3:
+                markComplete();
+                break;
+            case 4:
+                std::cout &lt;&lt; "Exiting Task Manager..." &lt;&lt; std::endl;
+                running = false;
+                break;
+            default:
+                running = false;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Compiling the Examples</h2>
+            <p>To compile and run any of these examples:</p>
+
+            <h3>Using g++</h3>
+            <pre><code class="language-cpp">g++ example.cpp -o example -I path/to/EasyMenu/Include
+./example</code></pre>
+
+            <h3>Using Visual Studio</h3>
+            <ol>
+                <li>Create a new Console Application project</li>
+                <li>Copy the example code into your <code>main.cpp</code> file</li>
+                <li>Configure the include path as described in the <a href="../installation.html">Installation guide</a></li>
+                <li>Build and run the project (F5 or Ctrl+F5)</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>Next Steps</h2>
+            <ul>
+                <li><a href="../api/classes.html">View the class reference</a> for detailed API documentation</li>
+                <li><a href="../concepts.html">Learn about key concepts</a> behind the library</li>
+                <li><a href="../troubleshooting.html">Check troubleshooting tips</a> if you encounter issues</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>
