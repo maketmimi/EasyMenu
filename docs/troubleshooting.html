@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="quick_start.html">Quick Start</a></li>
+                <li><a href="concepts.html">Concepts</a></li>
+                <li><a href="api/overview.html">API</a></li>
+                <li><a href="examples/basic_example.html">Examples</a></li>
+                <li><a href="troubleshooting.html" class="active">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Troubleshooting</h2>
+            <p>This page addresses common issues you may encounter when using EasyMenu and provides solutions to resolve them.</p>
+        </section>
+
+        <section class="section">
+            <h2>Compilation Issues</h2>
+
+            <h3>Error: Cannot Find EasyMenu.h</h3>
+            <p><strong>Symptom:</strong> The compiler reports an error like:</p>
+            <pre><code>fatal error: EasyMenu.h: No such file or directory
+// or
+cannot open source file "EasyMenu.h"</code></pre>
+
+            <p><strong>Cause:</strong> The compiler's include path does not point to the <code>Include/</code> folder of the library.</p>
+
+            <p><strong>Solution for g++ users:</strong></p>
+            <p>Add the include path using the <code>-I</code> flag when compiling:</p>
+            <pre><code class="language-cpp">g++ main.cpp -I path/to/EasyMenu/Include</code></pre>
+
+            <p><strong>Solution for Visual Studio users:</strong></p>
+            <ol>
+                <li>Copy the <code>Include/</code> folder into your project directory, or</li>
+                <li>Add the include path in Project Properties:
+                    <ul>
+                        <li>Right-click your project → Properties</li>
+                        <li>Navigate to: Configuration Properties → C/C++ → General → Additional Include Directories</li>
+                        <li>Add the path to the <code>Include</code> folder</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <p>See the <a href="installation.html">Installation page</a> for detailed instructions.</p>
+
+            <h3>Linker Errors</h3>
+            <p><strong>Symptom:</strong> Undefined references or unresolved external symbols at link time.</p>
+
+            <p><strong>Cause:</strong> EasyMenu is header-only and does not require linking. Linker errors typically indicate:</p>
+            <ul>
+                <li>Missing source files in your project (not related to EasyMenu)</li>
+                <li>Incorrectly configured build settings</li>
+            </ul>
+
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Ensure all your project source files are being compiled</li>
+                <li>Verify that you haven't accidentally created declaration-only headers that need corresponding .cpp files</li>
+                <li>EasyMenu itself requires no additional linking steps</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Console Layout and Display Issues</h2>
+
+            <h3>Menu Appears Broken or Misaligned</h3>
+            <p><strong>Important:</strong> If the menu layout appears broken, displays incorrectly, or has rendering issues, the problem is typically related to the <strong>terminal environment</strong>, not the library itself.</p>
+
+            <h4>Tested and Verified Environments</h4>
+            <p>EasyMenu has been extensively tested and verified to work correctly in the following terminal environments:</p>
+
+            <ul>
+                <li><strong>Windows CMD</strong> (Command Prompt) - Windows 7 and Windows 10</li>
+                <li><strong>Windows Terminal</strong> (modern Windows terminal application)</li>
+                <li><strong>PowerShell</strong> (both Windows PowerShell and PowerShell Core)</li>
+                <li><strong>Linux terminal environments</strong> (bash, zsh, and other standard shells)</li>
+                <li><strong>macOS Terminal</strong> (default terminal application)</li>
+            </ul>
+
+            <p>These environments render the menu interface correctly with proper highlighting, navigation, and layout.</p>
+
+            <h4>Windows Compatibility</h4>
+            <p>On Windows, EasyMenu <strong>does not rely on ANSI escape codes</strong>. Instead, it uses the native Windows Console API. This design choice ensures excellent compatibility with older Windows systems, including Windows 7, where ANSI support may be limited or disabled.</p>
+
+            <h4>VS Code Integrated Terminal Issues</h4>
+            <div class="alert alert-warning">
+                <strong>Known Issue:</strong> The Visual Studio Code integrated terminal on Windows may sometimes display incorrect layout or cursor behavior when running console UI programs.
+            </div>
+
+            <p>Due to differences in how the VS Code integrated terminal handles console output on Windows, EasyMenu may not behave reliably when executed inside the VS Code terminal window.</p>
+
+            <p><strong>Recommended Solution:</strong> If you experience rendering problems in VS Code, run your program in a <strong>dedicated terminal window</strong> instead:</p>
+
+            <ul>
+                <li>Windows CMD (Command Prompt)</li>
+                <li>PowerShell</li>
+                <li>Windows Terminal</li>
+                <li>Linux terminal (if using WSL)</li>
+                <li>macOS Terminal</li>
+            </ul>
+
+            <h4>VS Code Terminal on Linux</h4>
+            <p><strong>Note:</strong> The VS Code integrated terminal works correctly when running inside a <strong>Linux environment</strong>. The issue is specific to Windows. On Linux and macOS, the VS Code terminal has been tested and functions properly with EasyMenu.</p>
+
+            <h4>How to Run in a Dedicated Terminal</h4>
+
+            <p><strong>Windows:</strong></p>
+            <ol>
+                <li>Build your program in Visual Studio or with g++</li>
+                <li>Open Command Prompt, PowerShell, or Windows Terminal</li>
+                <li>Navigate to your executable's directory</li>
+                <li>Run the program directly</li>
+            </ol>
+
+            <p><strong>Linux/macOS:</strong></p>
+            <ol>
+                <li>Compile your program with g++</li>
+                <li>Open your system terminal</li>
+                <li>Navigate to your executable's directory</li>
+                <li>Run the program with <code>./yourprogram</code></li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>Navigation Issues</h2>
+
+            <h3>Menu Returns 0 Immediately</h3>
+            <p><strong>Symptom:</strong> Calling <code>RunMenu()</code> returns <code>0</code> without displaying the menu.</p>
+
+            <p><strong>Cause:</strong> The menu is empty or contains no navigable items.</p>
+
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Ensure you have added at least one item with <code>AddItem()</code></li>
+                <li>Check that at least one item is both visible and active (navigable)</li>
+            </ul>
+
+            <pre><code class="language-cpp">EasyMenu menu("Test");
+menu.AddItem("Option 1", true, true); // Active and visible
+
+unsigned int choice = menu.RunMenu(); // Will work correctly</code></pre>
+
+            <h3>Cannot Select Certain Items</h3>
+            <p><strong>Symptom:</strong> Some items are visible but cannot be selected when navigating.</p>
+
+            <p><strong>Cause:</strong> The items are inactive (the second parameter in <code>AddItem()</code> is <code>false</code>).</p>
+
+            <p><strong>Solution:</strong></p>
+            <p>Make items active if you want them to be selectable:</p>
+
+            <pre><code class="language-cpp">// This item is visible but not selectable
+menu.AddItem("Disabled Option", false, true);
+
+// Make it active
+menu.SetActivity(1, true); // Item number 1, make active</code></pre>
+
+            <h3>Off-by-One Selection Issues</h3>
+            <p><strong>Symptom:</strong> The selection number doesn't match your expectations.</p>
+
+            <p><strong>Cause:</strong> Remember that <code>RunMenu()</code> returns a 1-based index, not 0-based.</p>
+
+            <p><strong>Solution:</strong></p>
+            <p>If you're storing items in a 0-based container (like <code>std::vector</code>), adjust the index:</p>
+
+            <pre><code class="language-cpp">std::vector&lt;std::string&gt; actions = {"Action1", "Action2", "Action3"};
+
+EasyMenu menu("Choose Action");
+for (const auto& action : actions) {
+    menu.AddItem(action);
+}
+
+unsigned int choice = menu.RunMenu();
+
+if (choice &gt; 0 && choice &lt;= actions.size()) {
+    // Convert from 1-based to 0-based
+    std::string selected = actions[choice - 1];
+    std::cout &lt;&lt; "Selected: " &lt;&lt; selected &lt;&lt; std::endl;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Runtime Issues</h2>
+
+            <h3>Screen Not Clearing Properly</h3>
+            <p><strong>Symptom:</strong> Previous menu content remains visible when the menu refreshes.</p>
+
+            <p><strong>Cause:</strong> This can happen in certain terminal emulators or configurations.</p>
+
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Use a standard terminal application (CMD, PowerShell, Windows Terminal on Windows)</li>
+                <li>On Linux/macOS, ensure your terminal supports standard escape sequences</li>
+                <li>Try running in a different terminal to verify if it's environment-specific</li>
+            </ul>
+
+            <h3>Cursor Remains Visible</h3>
+            <p><strong>Symptom:</strong> The text cursor is visible while navigating the menu.</p>
+
+            <p><strong>Cause:</strong> The terminal may not support cursor visibility control, or the program terminated unexpectedly without restoring the cursor.</p>
+
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>The cursor is automatically hidden during menu navigation and restored when <code>RunMenu()</code> returns</li>
+                <li>If your program crashes or exits abnormally, the cursor may remain hidden; simply close and reopen the terminal</li>
+                <li>Use tested terminal environments listed above for best results</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Customization Issues</h2>
+
+            <h3>Custom Header or Footer Not Appearing</h3>
+            <p><strong>Symptom:</strong> You set a custom header or footer, but it doesn't display.</p>
+
+            <p><strong>Cause:</strong> You need to include the <code>EasyMenuComponents.h</code> header and use the correct classes.</p>
+
+            <p><strong>Solution:</strong></p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenu.h&gt;
+#include &lt;EasyMenuComponents.h&gt;
+
+EasyMenu menu("Test");
+
+// Create custom header
+EasyMenuComponents::clsEasyMenuHeader header;
+header.AddLine("===================");
+header.AddLine("Custom Header");
+header.AddLine("===================");
+
+menu.SetHeader(header);
+
+menu.AddItem("Option 1");
+menu.RunMenu();</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Getting Help</h2>
+            <p>If you encounter an issue not covered here:</p>
+
+            <ol>
+                <li>Verify you're using a <a href="#console-layout-and-display-issues">supported terminal environment</a></li>
+                <li>Check the <a href="installation.html">installation instructions</a> to ensure proper setup</li>
+                <li>Review the <a href="examples/basic_example.html">examples</a> to see working code</li>
+                <li>Consult the <a href="api/classes.html">API reference</a> for method details</li>
+            </ol>
+
+            <p>When reporting issues, please include:</p>
+            <ul>
+                <li>Your operating system and version</li>
+                <li>Terminal application being used</li>
+                <li>Compiler and version</li>
+                <li>Minimal code example that reproduces the issue</li>
+                <li>Compilation command used</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

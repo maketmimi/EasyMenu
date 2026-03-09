@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="quick_start.html" class="active">Quick Start</a></li>
+                <li><a href="concepts.html">Concepts</a></li>
+                <li><a href="api/overview.html">API</a></li>
+                <li><a href="examples/basic_example.html">Examples</a></li>
+                <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Quick Start Guide</h2>
+            <p>This guide will walk you through creating your first interactive console menu using EasyMenu. In just a few minutes, you'll have a fully functional menu system running in your application.</p>
+        </section>
+
+        <section class="section">
+            <h2>Your First Menu</h2>
+            <p>Let's create a simple menu with a few options. This example demonstrates the core functionality of EasyMenu.</p>
+
+            <h3>Step 1: Include the Header</h3>
+            <p>First, include the EasyMenu header in your source file:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;</code></pre>
+
+            <h3>Step 2: Create a Menu</h3>
+            <p>Create an <code>EasyMenu</code> object with a title for your menu:</p>
+
+            <pre><code class="language-cpp">EasyMenu menu("Main Menu");</code></pre>
+
+            <h3>Step 3: Add Menu Items</h3>
+            <p>Use the <code>AddItem()</code> method to add options to your menu:</p>
+
+            <pre><code class="language-cpp">menu.AddItem("New Game");
+menu.AddItem("Load Game");
+menu.AddItem("Settings");
+menu.AddItem("Exit");</code></pre>
+
+            <h3>Step 4: Display the Menu and Get User Selection</h3>
+            <p>Call <code>RunMenu()</code> to display the menu and capture the user's choice:</p>
+
+            <pre><code class="language-cpp">unsigned int choice = menu.RunMenu();</code></pre>
+
+            <p>The <code>RunMenu()</code> method returns the 1-based index of the selected item. If the menu is empty or cannot be navigated, it returns <code>0</code>.</p>
+
+            <h3>Complete Example</h3>
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    // Create a menu with a title
+    EasyMenu menu("Main Menu");
+
+    // Add menu items
+    menu.AddItem("New Game");
+    menu.AddItem("Load Game");
+    menu.AddItem("Settings");
+    menu.AddItem("Exit");
+
+    // Display the menu and get the user's choice
+    unsigned int choice = menu.RunMenu();
+
+    // Handle the user's selection
+    if (choice == 0) {
+        std::cout &lt;&lt; "No selection made." &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "You selected option: " &lt;&lt; choice &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Understanding Navigation</h2>
+            <p>When your menu runs, users can navigate using:</p>
+            <ul>
+                <li><strong>Up Arrow</strong> - Move to the previous item</li>
+                <li><strong>Down Arrow</strong> - Move to the next item</li>
+                <li><strong>Enter</strong> - Select the highlighted item</li>
+            </ul>
+
+            <p>The currently highlighted item is visually distinguished (typically with inverted colors or highlighting).</p>
+        </section>
+
+        <section class="section">
+            <h2>Handling Menu Selections</h2>
+            <p>The typical pattern for handling menu selections is to use a switch statement or if-else chain:</p>
+
+            <pre><code class="language-cpp">unsigned int choice = menu.RunMenu();
+
+switch (choice) {
+    case 1:
+        std::cout &lt;&lt; "Starting new game..." &lt;&lt; std::endl;
+        break;
+    case 2:
+        std::cout &lt;&lt; "Loading saved game..." &lt;&lt; std::endl;
+        break;
+    case 3:
+        std::cout &lt;&lt; "Opening settings..." &lt;&lt; std::endl;
+        break;
+    case 4:
+        std::cout &lt;&lt; "Goodbye!" &lt;&lt; std::endl;
+        break;
+    default:
+        std::cout &lt;&lt; "Invalid selection." &lt;&lt; std::endl;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Creating a Menu Loop</h2>
+            <p>For applications that need to repeatedly show a menu until the user chooses to exit:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    EasyMenu menu("Application Menu");
+    menu.AddItem("Perform action");
+    menu.AddItem("View data");
+    menu.AddItem("Exit");
+
+    bool running = true;
+
+    while (running) {
+        unsigned int choice = menu.RunMenu();
+
+        switch (choice) {
+            case 1:
+                std::cout &lt;&lt; "Action performed!" &lt;&lt; std::endl;
+                std::cin.get(); // Wait for user
+                break;
+            case 2:
+                std::cout &lt;&lt; "Displaying data..." &lt;&lt; std::endl;
+                std::cin.get();
+                break;
+            case 3:
+                running = false;
+                std::cout &lt;&lt; "Exiting..." &lt;&lt; std::endl;
+                break;
+            default:
+                running = false;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Customizing Item Visibility and Activity</h2>
+            <p>You can control whether items are visible and whether they can be selected:</p>
+
+            <pre><code class="language-cpp">EasyMenu menu("Game Menu");
+
+menu.AddItem("Continue", true, true);      // Active and visible
+menu.AddItem("New Game", true, true);      // Active and visible
+menu.AddItem("Load Game", false, true);    // Visible but inactive (grayed out)
+menu.AddItem("Debug Mode", true, false);   // Active but hidden
+
+unsigned int choice = menu.RunMenu();</code></pre>
+
+            <p>In this example:</p>
+            <ul>
+                <li>"Continue" and "New Game" can be selected normally</li>
+                <li>"Load Game" is visible but cannot be selected (useful for disabled features)</li>
+                <li>"Debug Mode" is hidden from the user entirely</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Starting from a Specific Item</h2>
+            <p>You can specify which item should be highlighted when the menu first appears:</p>
+
+            <pre><code class="language-cpp">EasyMenu menu("Main Menu");
+menu.AddItem("Option 1");
+menu.AddItem("Option 2");
+menu.AddItem("Option 3");
+
+// Start with the second item highlighted
+unsigned int choice = menu.RunMenu(2);</code></pre>
+
+            <p>This is useful when you want to guide the user's attention to a specific option.</p>
+        </section>
+
+        <section class="section">
+            <h2>Modifying Menu Items</h2>
+            <p>You can update or remove items after creating the menu:</p>
+
+            <pre><code class="language-cpp">EasyMenu menu("Dynamic Menu");
+menu.AddItem("Item 1");
+menu.AddItem("Item 2");
+menu.AddItem("Item 3");
+
+// Update item 2 (1-based index)
+menu.UpdateItem(2, "Updated Item 2");
+
+// Remove item 3
+menu.RemoveItem(3);
+
+// Add a new item
+menu.AddItem("New Item");
+
+unsigned int choice = menu.RunMenu();</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Next Steps</h2>
+            <p>Now that you've created your first menu, you can:</p>
+            <ul>
+                <li><a href="concepts.html">Learn about key concepts</a> behind EasyMenu</li>
+                <li><a href="api/overview.html">Explore the full API</a> to discover advanced features</li>
+                <li><a href="examples/basic_example.html">View more examples</a> for common use cases</li>
+                <li><a href="api/classes.html">Read the class reference</a> for detailed method documentation</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concepts - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="quick_start.html">Quick Start</a></li>
+                <li><a href="concepts.html" class="active">Concepts</a></li>
+                <li><a href="api/overview.html">API</a></li>
+                <li><a href="examples/basic_example.html">Examples</a></li>
+                <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Core Concepts</h2>
+            <p>EasyMenu is built around a small set of intuitive concepts that work together to create interactive console menus. Understanding these concepts will help you use the library effectively.</p>
+        </section>
+
+        <section class="section">
+            <h2>Menu</h2>
+            <p>A <strong>menu</strong> is the main container that holds all the components of your interactive interface. It consists of:</p>
+            <ul>
+                <li>A label (title) that identifies the menu</li>
+                <li>An optional header displayed at the top</li>
+                <li>A list of selectable items</li>
+                <li>An optional footer displayed at the bottom</li>
+            </ul>
+
+            <p>The <code>EasyMenu</code> class is the primary entry point for creating and managing menus.</p>
+
+            <pre><code class="language-cpp">// Create a menu with a label
+EasyMenu menu("Main Menu");
+
+// The menu now has a default header showing "Main Menu"
+// and a default footer</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Menu Items</h2>
+            <p>A <strong>menu item</strong> is an individual selectable option within the menu. Items have several properties:</p>
+
+            <h3>Label</h3>
+            <p>The text displayed for the item. This is what the user sees.</p>
+
+            <pre><code class="language-cpp">menu.AddItem("Save Game");</code></pre>
+
+            <h3>Visibility</h3>
+            <p>Controls whether the item is shown to the user. Hidden items are completely invisible.</p>
+
+            <pre><code class="language-cpp">// Third parameter is visibility
+menu.AddItem("Debug Options", true, false); // Hidden item</code></pre>
+
+            <h3>Activity</h3>
+            <p>Controls whether the item can be selected. Inactive items are visible but cannot be chosen (typically displayed in a different style).</p>
+
+            <pre><code class="language-cpp">// Second parameter is activity, third is visibility
+menu.AddItem("Multiplayer", false, true); // Visible but inactive</code></pre>
+
+            <h3>Navigability</h3>
+            <p>An item is <strong>navigable</strong> if it is both visible and active. Only navigable items can be highlighted and selected by the user.</p>
+        </section>
+
+        <section class="section">
+            <h2>Item Indexing</h2>
+            <p>Items in a menu are numbered starting from <strong>1</strong> (one-based indexing). This makes the API more intuitive for users:</p>
+
+            <pre><code class="language-cpp">menu.AddItem("First Item");   // Item number 1
+menu.AddItem("Second Item");  // Item number 2
+menu.AddItem("Third Item");   // Item number 3
+
+unsigned int choice = menu.RunMenu();
+// Returns 1 for first item, 2 for second item, etc.</code></pre>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> When <code>RunMenu()</code> returns <code>0</code>, it means the menu is empty or contains no navigable items.
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Headers and Footers</h2>
+            <p>Headers and footers are optional visual blocks that appear above and below the menu items.</p>
+
+            <h3>Default Header and Footer</h3>
+            <p>When you create a menu with a label, EasyMenu automatically generates a default header displaying the label and a simple footer:</p>
+
+            <pre><code class="language-cpp">EasyMenu menu("Settings");
+// Automatically includes:
+// - Header with "Settings" label
+// - Default footer</code></pre>
+
+            <h3>Custom Headers and Footers</h3>
+            <p>You can create custom headers and footers using the components from the <code>EasyMenuComponents</code> namespace:</p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenuComponents.h&gt;
+
+// Create custom header
+EasyMenuComponents::clsEasyMenuHeader customHeader;
+customHeader.AddLine("================================");
+customHeader.AddLine("    My Custom Application Menu");
+customHeader.AddLine("         Version 1.0");
+customHeader.AddLine("================================");
+
+menu.SetHeader(customHeader);</code></pre>
+
+            <h3>Empty Menu</h3>
+            <p>If you create a menu without a label, it will not have a default header or footer:</p>
+
+            <pre><code class="language-cpp">EasyMenu menu; // Empty menu, no default header/footer
+menu.AddItem("Item 1");
+menu.AddItem("Item 2");</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Menu Navigation</h2>
+            <p>When a menu is displayed, users navigate using keyboard input:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Up Arrow</td>
+                        <td>Move to the previous navigable item</td>
+                    </tr>
+                    <tr>
+                        <td>Down Arrow</td>
+                        <td>Move to the next navigable item</td>
+                    </tr>
+                    <tr>
+                        <td>Enter</td>
+                        <td>Select the currently highlighted item</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Navigation automatically skips over items that are inactive or hidden. The highlighted item wraps around when reaching the top or bottom of the menu.</p>
+        </section>
+
+        <section class="section">
+            <h2>Rendering and Pagination</h2>
+            <p>EasyMenu automatically adapts the menu display to fit the terminal window size.</p>
+
+            <h3>Automatic Terminal Detection</h3>
+            <p>The library detects the current terminal dimensions and adjusts the display accordingly.</p>
+
+            <h3>Pagination</h3>
+            <p>If the menu has more items than can fit on the screen, EasyMenu automatically paginates the display. Only the items that fit in the current terminal are shown at once, and the view scrolls as the user navigates.</p>
+
+            <h3>Adaptive Sizing</h3>
+            <p>The menu recalculates the available space based on:</p>
+            <ul>
+                <li>Terminal window height</li>
+                <li>Number of header lines</li>
+                <li>Number of footer lines</li>
+            </ul>
+
+            <p>This ensures the menu always displays correctly regardless of terminal size.</p>
+        </section>
+
+        <section class="section">
+            <h2>Platform Abstraction</h2>
+            <p>EasyMenu works consistently across different operating systems through an internal platform abstraction layer. You don't need to write platform-specific code.</p>
+
+            <h3>Supported Platforms</h3>
+            <ul>
+                <li><strong>Windows</strong> - Uses native Windows Console API</li>
+                <li><strong>Linux</strong> - Uses POSIX terminal interfaces</li>
+                <li><strong>macOS</strong> - Uses POSIX terminal interfaces</li>
+            </ul>
+
+            <p>The same code works on all platforms without modification.</p>
+        </section>
+
+        <section class="section">
+            <h2>Menu Lifecycle</h2>
+            <p>A typical menu follows this lifecycle:</p>
+
+            <ol>
+                <li><strong>Creation</strong> - Create an <code>EasyMenu</code> object</li>
+                <li><strong>Configuration</strong> - Add items, customize header/footer if needed</li>
+                <li><strong>Display</strong> - Call <code>RunMenu()</code> to show the menu</li>
+                <li><strong>Navigation</strong> - User navigates and selects an item</li>
+                <li><strong>Return</strong> - <code>RunMenu()</code> returns the selected item number</li>
+                <li><strong>Action</strong> - Your code handles the selection</li>
+            </ol>
+
+            <pre><code class="language-cpp">// 1. Creation
+EasyMenu menu("Game Menu");
+
+// 2. Configuration
+menu.AddItem("Play");
+menu.AddItem("Options");
+menu.AddItem("Quit");
+
+// 3-5. Display, Navigation, Return
+unsigned int choice = menu.RunMenu();
+
+// 6. Action
+switch (choice) {
+    case 1: startGame(); break;
+    case 2: showOptions(); break;
+    case 3: quit(); break;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Design Philosophy</h2>
+            <p>EasyMenu is designed with these principles in mind:</p>
+
+            <h3>Simplicity</h3>
+            <p>The API is intentionally minimal. Common tasks require just a few method calls.</p>
+
+            <h3>Header-Only</h3>
+            <p>No separate compilation or linking required. Just include the headers and use the library.</p>
+
+            <h3>Zero Dependencies</h3>
+            <p>EasyMenu depends only on the standard C++ library. No external dependencies to manage.</p>
+
+            <h3>Cross-Platform</h3>
+            <p>Write once, run anywhere. The same code works on Windows, Linux, and macOS.</p>
+
+            <h3>Intuitive</h3>
+            <p>One-based indexing and clear method names make the library easy to understand and use.</p>
+        </section>
+
+        <section class="section">
+            <h2>Next Steps</h2>
+            <p>Now that you understand the core concepts, you can:</p>
+            <ul>
+                <li><a href="api/overview.html">Explore the API documentation</a> for detailed reference</li>
+                <li><a href="api/classes.html">Read the class reference</a> for all available methods</li>
+                <li><a href="examples/basic_example.html">View practical examples</a> showing common patterns</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>

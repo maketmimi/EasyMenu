@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Overview - EasyMenu Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">EasyMenu</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../quick_start.html">Quick Start</a></li>
+                <li><a href="../concepts.html">Concepts</a></li>
+                <li><a href="overview.html" class="active">API</a></li>
+                <li><a href="../examples/basic_example.html">Examples</a></li>
+                <li><a href="../troubleshooting.html">Troubleshooting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>API Overview</h2>
+            <p>This section provides comprehensive documentation for the EasyMenu public API. The library exposes a clean, minimal interface designed for ease of use while providing powerful menu functionality.</p>
+        </section>
+
+        <section class="section">
+            <h2>Public Headers</h2>
+            <p>EasyMenu provides two main headers for public use:</p>
+
+            <h3>EasyMenu.h</h3>
+            <p>The primary header containing the <code>EasyMenu</code> class. This is the main entry point for the library and is required for all applications using EasyMenu.</p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenu.h&gt;</code></pre>
+
+            <p>This header provides:</p>
+            <ul>
+                <li>The <code>EasyMenu</code> class for creating and managing menus</li>
+                <li>All core functionality for adding, updating, and removing items</li>
+                <li>Methods for running interactive menu sessions</li>
+            </ul>
+
+            <h3>EasyMenuComponents.h</h3>
+            <p>An optional header that exposes visual components for menu customization. Include this header only if you need to create custom headers or footers.</p>
+
+            <pre><code class="language-cpp">#include &lt;EasyMenuComponents.h&gt;</code></pre>
+
+            <p>This header provides access to:</p>
+            <ul>
+                <li><code>EasyMenuComponents::clsEasyMenuHeader</code> - For creating custom menu headers</li>
+                <li><code>EasyMenuComponents::clsEasyMenuFooter</code> - For creating custom menu footers</li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> Most applications only need to include <code>EasyMenu.h</code>. The default headers and footers are sufficient for typical use cases.
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Primary Classes</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Header</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>EasyMenu</code></td>
+                        <td><code>EasyMenu.h</code></td>
+                        <td>Main class for creating and managing interactive console menus</td>
+                    </tr>
+                    <tr>
+                        <td><code>clsEasyMenuHeader</code></td>
+                        <td><code>EasyMenuComponents.h</code></td>
+                        <td>Component for creating custom menu headers</td>
+                    </tr>
+                    <tr>
+                        <td><code>clsEasyMenuFooter</code></td>
+                        <td><code>EasyMenuComponents.h</code></td>
+                        <td>Component for creating custom menu footers</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>See the <a href="classes.html">Classes Reference</a> for detailed documentation of each class.</p>
+        </section>
+
+        <section class="section">
+            <h2>Typical Usage Pattern</h2>
+            <p>Most applications follow this pattern when using EasyMenu:</p>
+
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;EasyMenu.h&gt;
+
+int main() {
+    // 1. Create a menu
+    EasyMenu menu("Application Menu");
+
+    // 2. Add items
+    menu.AddItem("Item 1");
+    menu.AddItem("Item 2");
+    menu.AddItem("Exit");
+
+    // 3. Display and get selection
+    unsigned int choice = menu.RunMenu();
+
+    // 4. Handle the selection
+    switch (choice) {
+        case 1:
+            // Handle item 1
+            break;
+        case 2:
+            // Handle item 2
+            break;
+        case 3:
+            // Handle exit
+            break;
+    }
+
+    return 0;
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>Key Design Principles</h2>
+
+            <h3>Header-Only Library</h3>
+            <p>EasyMenu is entirely header-based. No compilation or linking of library files is required. Simply include the headers and use the classes.</p>
+
+            <h3>One-Based Indexing</h3>
+            <p>Menu items are numbered starting from 1, not 0. This makes the API more intuitive:</p>
+            <ul>
+                <li><code>AddItem()</code> adds items sequentially (1, 2, 3, ...)</li>
+                <li><code>RunMenu()</code> returns the selected item number (1-based)</li>
+                <li><code>UpdateItem()</code>, <code>RemoveItem()</code>, etc., use 1-based numbering</li>
+                <li>A return value of <code>0</code> indicates no selection or an empty menu</li>
+            </ul>
+
+            <h3>Platform Independence</h3>
+            <p>The API is identical across all supported platforms. Write your code once and it works on Windows, Linux, and macOS without modification.</p>
+
+            <h3>Minimal Dependencies</h3>
+            <p>EasyMenu depends only on the C++ standard library. No external dependencies are required.</p>
+        </section>
+
+        <section class="section">
+            <h2>Error Handling</h2>
+            <p>EasyMenu uses return values to indicate success or failure for operations that might fail:</p>
+
+            <h3>Boolean Return Values</h3>
+            <p>Methods like <code>UpdateItem()</code>, <code>RemoveItem()</code>, <code>SetVisibility()</code>, and <code>SetActivity()</code> return <code>bool</code>:</p>
+            <ul>
+                <li><code>true</code> - Operation succeeded</li>
+                <li><code>false</code> - Operation failed (typically because the item number is out of range)</li>
+            </ul>
+
+            <pre><code class="language-cpp">if (menu.UpdateItem(5, "New Label")) {
+    // Success
+} else {
+    // Failed - item 5 doesn't exist
+}</code></pre>
+
+            <h3>Special Return Values</h3>
+            <p><code>RunMenu()</code> returns <code>0</code> when:</p>
+            <ul>
+                <li>The menu is empty (no items have been added)</li>
+                <li>No items are navigable (all items are either hidden or inactive)</li>
+            </ul>
+
+            <pre><code class="language-cpp">unsigned int choice = menu.RunMenu();
+
+if (choice == 0) {
+    std::cout &lt;&lt; "Menu is empty or not navigable" &lt;&lt; std::endl;
+} else {
+    // Handle selection
+}</code></pre>
+        </section>
+
+        <section class="section">
+            <h2>API Categories</h2>
+
+            <h3>Menu Creation and Configuration</h3>
+            <ul>
+                <li>Constructors for creating menus</li>
+                <li>Methods for setting headers and footers</li>
+                <li>Methods for clearing menu components</li>
+            </ul>
+
+            <h3>Item Management</h3>
+            <ul>
+                <li>Adding items to the menu</li>
+                <li>Updating existing items</li>
+                <li>Removing items</li>
+                <li>Controlling item visibility and activity</li>
+            </ul>
+
+            <h3>Menu Execution</h3>
+            <ul>
+                <li>Running the menu and capturing user selection</li>
+                <li>Controlling the starting position</li>
+            </ul>
+
+            <h3>Menu Inspection</h3>
+            <ul>
+                <li>Querying the number of items</li>
+                <li>Checking if the menu is empty</li>
+                <li>Retrieving header and footer components</li>
+            </ul>
+
+            <h3>Customization Components</h3>
+            <ul>
+                <li>Creating custom headers with multiple lines</li>
+                <li>Creating custom footers with multiple lines</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Thread Safety</h2>
+            <p>EasyMenu is not thread-safe. If you need to use menus from multiple threads, ensure proper synchronization (mutexes, locks, etc.) in your application code.</p>
+        </section>
+
+        <section class="section">
+            <h2>Next Steps</h2>
+            <ul>
+                <li><a href="classes.html">View the complete class reference</a> for detailed method documentation</li>
+                <li><a href="../examples/basic_example.html">Explore practical examples</a> showing common patterns</li>
+                <li><a href="../quick_start.html">Follow the quick start guide</a> to create your first menu</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EasyMenu. Licensed under the MIT License.</p>
+        </div>
+    </footer>
+</body>
+</html>
