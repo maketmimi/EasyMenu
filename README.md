@@ -1,3 +1,5 @@
+![EasyMenu Demo](docs/assets/Banner.png)
+
 See the full documentation at [EasyMenu-Documentation](https://maketmimi.github.io/EasyMenu/).
 
 # EasyMenu
